@@ -34,5 +34,5 @@ jobs:
         run: poetry install
 
       # Run unittests
-      - name: Install poetry dependencies
-        run: poetry run pytest
+      - name: Run unittests
+        run: poetry run pytest -v
