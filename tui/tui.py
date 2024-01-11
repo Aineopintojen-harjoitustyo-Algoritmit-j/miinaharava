@@ -31,6 +31,9 @@ class Tui():
         if color>=0 and color<8:
             print(end=f"\033[4{color}m")
 
+    def cursor_up(self, lines):
+        print(end=f"\033[{lines}F")
+
     def reset_color(self):
         print(end="\033[0m")
         
@@ -53,6 +56,7 @@ class Tui():
         self.reset_color()
         
     def draw_matrix(self, matrix, hx, hy ):
+        self.cursor_up(len(matrix[0]))
         for y in range(len(matrix[0])):
             for x in range(len(matrix)):
                 self.draw_tile( matrix[x][y], 
@@ -88,7 +92,6 @@ class Tui():
             x = len(matrix)-1 if x >= len(matrix) else x
             y = len(matrix[0])-1 if y >= len(matrix[0]) else y
             
-            print(repr(c))
             self.draw_matrix(matrix, x, y)
             
         
