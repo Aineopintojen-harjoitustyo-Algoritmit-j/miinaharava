@@ -6,7 +6,7 @@ authors = ["Aineopintojen-harjoitustyo-Algoritmit-j <github-hy-tiralabra@v.hix.f
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 
 
 [tool.poetry.group.dev.dependencies]
