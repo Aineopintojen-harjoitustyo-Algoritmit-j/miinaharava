@@ -14,7 +14,7 @@ while True:
         t.draw_matrix(b.get_view(),-1,-1)
         print("LOPETUS!")
         break
-    if not b.make_guess(x, y):
+    if b.get_mask(x,y) and not b.make_guess(x, y):
         t.draw_matrix(b.get_view(),-1,-1)
         print("KUOLEMA!")
         break

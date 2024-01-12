@@ -73,6 +73,8 @@ class Board():
             area=area.union(self.collect_area(tx, ty, area))
         return area
         
+    def get_mask(self, x, y):
+        return self.masked[x][y]
         
     def make_guess(self, x, y):
         if self.invalid_coordinates(x, y):
