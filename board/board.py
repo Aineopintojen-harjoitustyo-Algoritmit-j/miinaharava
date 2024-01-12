@@ -60,6 +60,8 @@ class Board():
             
         
     def collect_area(self, x, y, area=set()):
+        if not area:
+            area.add((x,y))
         to_test = []
         for dx, dy in ( (0,-1), (-1,0), (1,0), (0,1) ):
             if self.invalid_coordinates(x+dx, y+dy):
@@ -68,7 +70,6 @@ class Board():
                 to_test.append((x+dx, y+dy))
                 area.add((x+dx, y+dy))
         for tx, ty in to_test:
-            area.add((x,y))
             area=area.union(self.collect_area(tx, ty, area))
         return area
         
