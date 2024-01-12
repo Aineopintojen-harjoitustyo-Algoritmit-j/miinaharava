@@ -1,4 +1,5 @@
 [![CI](https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava/actions/workflows/auto.yml/badge.svg)](https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava/actions/workflows/auto.yml)
+[![codecov](https://codecov.io/gh/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava/graph/badge.svg?token=KK71RE0U3O)](https://codecov.io/gh/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava)
 # miinaharava
 Miinaharava ratkaisijalla
 
