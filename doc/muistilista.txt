@@ -1,0 +1,5 @@
+MUISTILISTA!
+
+Generoi haarakattavuusraportti:
+poetry run python3 -m coverage run --branch -m pytest && poetry run python3 -m coverage html && firefox htmlcov/index.html
+

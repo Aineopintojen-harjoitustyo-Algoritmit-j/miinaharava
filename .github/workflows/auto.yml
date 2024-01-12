@@ -34,5 +34,16 @@ jobs:
         run: poetry install
 
       # Run unittests
-      - name: Run unittests
-        run: poetry run python3 -m pytest -v
+      - name: Run unittests with coverage
+        run: poetry run python3 -m coverage run --branch -m pytest -v 
+        
+      # coverage -> xml
+      - name: Generate coverage report
+        run: poetry run python3 -m coverage xml
+        
+      # xml -> codecov
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        
