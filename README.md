@@ -8,5 +8,7 @@ Miinaharava ratkaisijalla
   
 ## Ohjeet:
 `git clone https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava`
+
 `cd miinaharava`
+
 `python3 app.py`
