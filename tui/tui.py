@@ -1,27 +1,25 @@
 import termios, fcntl, sys, os
-fd = sys.stdin.fileno()
-
-oldterm = termios.tcgetattr(fd)
-newattr = termios.tcgetattr(fd)
-newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
-termios.tcsetattr(fd, termios.TCSANOW, newattr)
-
-oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
-fcntl.fcntl(fd, fcntl.F_SETFL, oldflags | os.O_NONBLOCK)
-
 
 class Tui():
     def __init__(self):
+        # Vaatii hieman terminaaliasetusten muokkaamista jotta yksittäiset
+        # napin painallukset voidaan lukea
         # https://stackoverflow.com/questions/983354/how-do-i-wait-for-a-pressed-key
         fd = sys.stdin.fileno()
-        oldterm = termios.tcgetattr(fd)
+        self.oldterm = termios.tcgetattr(fd)
+        
         newattr = termios.tcgetattr(fd)
         newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
         termios.tcsetattr(fd, termios.TCSANOW, newattr)
         
+        self.oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
+        fcntl.fcntl(fd, fcntl.F_SETFL, self.oldflags | os.O_NONBLOCK)
+        
     def __del__(self):
-        termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
-        fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
+        # palautetaan terminaali takaisin alkupetäiseen uskoon
+        fd = sys.stdin.fileno()
+        termios.tcsetattr(fd, termios.TCSAFLUSH, self.oldterm)
+        fcntl.fcntl(fd, fcntl.F_SETFL, self.oldflags)
         
     def set_color(self, color):
         if color>=0 and color<16:
