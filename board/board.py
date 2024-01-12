@@ -85,8 +85,9 @@ class Board():
             print("Ruutu on jo avattu", file=stderr)
             return False
             
+        self.masked[x][y] = 0
+        
         if self.tiles[x][y] == 9:
-            self.masked[x][y] = 0
             return False
             
         if self.tiles[x][y] == 0:
@@ -94,8 +95,6 @@ class Board():
                 for dx, dy in ( (0,-1), (-1,0), (0,0), (1,0), (0,1) ):
                     if not self.invalid_coordinates(cx+dx, cy+dy):
                         self.masked[cx+dx][cy+dy] = 0
-        else:
-            self.masked[x][y] = 0
                                 
         return True
         

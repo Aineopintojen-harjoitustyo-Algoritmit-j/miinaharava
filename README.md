@@ -6,3 +6,7 @@ Miinaharava ratkaisijalla
 ## Dokumentit:
 - [määrittelydokumentti](doc/m%C3%A4%C3%A4rittelydokumentti.pdf)
   
+## Ohjeet:
+`git clone https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava`
+`cd miinaharava`
+`python3 app.py`
