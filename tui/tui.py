@@ -1,4 +1,10 @@
 import termios, fcntl, sys, os
+from enum import Enum
+
+class Action(Enum):
+    QUIT = 0
+    OPEN = 1
+    FLAG = 2
 
 class Tui():
     def __init__(self):
@@ -40,7 +46,8 @@ class Tui():
             (' ', 7, 0), ('1', 10, 0), ('2', 11, 0),
             ('3', 13, 0), ('4', 9, 0), ('5', 9, 0),
             ('6', 9, 0), ('7', 9, 0), ('8', 9, 0),
-            ('¤', 15, 1), ('#', 8, 7)
+            ('¤', 15, 1), ('#', 8, 7), ('B', 8, 7),
+            ('?', 8, 7)
         )
 
         if hilighted:
@@ -61,7 +68,7 @@ class Tui():
                         x == hx and y == hy )
             print()
                 
-    def matrix_selector(self, matrix, x,y ):
+    def matrix_selector(self, matrix, x, y ):
         self.draw_matrix(matrix, x, y)
         while True:
             try:
@@ -69,20 +76,20 @@ class Tui():
             except:
                 continue
             match c:
-                case 'A':
+                case 'A' | 'w':
                     y-=1
-                case 'B':
-                    y+=1
-                case 'C':
-                    x+=1
-                case 'D':
+                case 'D' | 'a':
                     x-=1
-                case '':
-                    continue
+                case 'B' | 's':
+                    y+=1
+                case 'C' | 'd':
+                    x+=1
                 case 'q':
-                    return (-1,-1)
-                case ' ':
-                    return (x,y)
+                    return (Action.QUIT,-1,-1)
+                case ' ' | '\n':
+                    return (Action.OPEN, x, y)
+                case 'f' | 'm':
+                    return (Action.FLAG, x, y)
                 case _:
                     continue
             x = 0 if x < 0 else x

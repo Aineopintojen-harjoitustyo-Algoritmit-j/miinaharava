@@ -21,10 +21,12 @@ class Board():
         self.randomize_bombs( bombs )
         self.calculate_neighbours()
         
+
     def initialize_tiles(self, size):
         self.tiles = [[0 for _ in range(size)] for _ in range(size)]
         self.masked = [[10 for _ in range(size)] for _ in range(size)]
         
+
     def randomize_bombs(self, bomb_count):
         for _ in range(bomb_count):
             while True:
@@ -34,9 +36,23 @@ class Board():
                 self.tiles[x][y]=9
                 break
                 
+
+    def calculate_neighbours(self):
+        for y in range(self.size):
+            for x in range(self.size):
+                if self.tiles[x][y] == 9:
+                    continue
+                neighbouring_bombs = 0
+                for nx, ny in self.get_neighbours_coords(x,y):
+                    if self.tiles[nx][ny] == 9:
+                        neighbouring_bombs += 1
+                self.tiles[x][y] = neighbouring_bombs
+        
+
     def invalid_coordinates(self, x, y):
         return x < 0 or x >= self.size or y < 0 or y >= self.size
         
+
     def get_neighbours_coords(self, x, y, include_home = False):
         offsets = (
             (-1,-1), (0,-1), (1,-1),
@@ -53,17 +69,7 @@ class Board():
                 coordinates.append( (x+dx, y+dy) )
         return coordinates
             
-    def calculate_neighbours(self):
-        for y in range(self.size):
-            for x in range(self.size):
-                if self.tiles[x][y] == 9:
-                    continue
-                neighbouring_bombs = 0
-                for nx, ny in self.get_neighbours_coords(x,y):
-                    if self.tiles[nx][ny] == 9:
-                        neighbouring_bombs += 1
-                self.tiles[x][y] = neighbouring_bombs
-        
+
     def get_view(self):
         view = deepcopy(self.masked)
         for y in range(self.size):
@@ -72,6 +78,7 @@ class Board():
                     view[x][y]=self.tiles[x][y]
         return view
         
+
     def is_winning(self):
         for y in range(self.size):
             for x in range(self.size):
@@ -79,7 +86,7 @@ class Board():
                     return False
         return True
             
-        
+
     def collect_area(self, x, y, area=set()):
         if not area:
             area.add((x,y))
@@ -92,8 +99,34 @@ class Board():
             area=area.union(self.collect_area(tx, ty, area))
         return area
         
+
     def get_mask(self, x, y):
         return self.masked[x][y]
+
+
+    def flag_tile(self, x, y):
+        if self.invalid_coordinates(x, y):
+            print("Koordinaatit on pelilaudan ulkopuolella", file=stderr)
+            return False
+        
+        if self.masked[x][y] == 0:
+            print("Ei voi liputtaa avattua ruutua", file=stderr)
+            return False
+            
+        match self.masked[x][y]:
+            case 0:
+                print("Ei voi liputtaa avattua ruutua", file=stderr)
+                return False
+            case 10 | 11:
+                self.masked[x][y]+=1
+                return True
+            case 12:
+                self.masked[x][y]=10
+                return True
+        
+        print("Ruudulla odottamaton lippu", file=stderr)
+        return False
+
         
     def make_guess(self, x, y):
         if self.invalid_coordinates(x, y):
