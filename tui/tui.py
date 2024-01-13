@@ -1,4 +1,5 @@
 import termios, fcntl, sys, os
+from time import sleep
 from tui.static import Action, ActionKeys, ActionEscKeys, Colors, TileTypes
 
 class Tui():
@@ -64,6 +65,8 @@ class Tui():
         escape = 0
         while True:
             try:
+                # Ehkä riittää jos näppäimiä luetaan 200x sekunnissa
+                sleep(0.005)		
                 c = sys.stdin.read(1)
             except:
                 continue
