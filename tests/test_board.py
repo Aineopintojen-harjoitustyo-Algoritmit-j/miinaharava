@@ -32,4 +32,51 @@ class TestBoardClass(unittest.TestCase):
             self.assertEqual(v[i],t[i])
 
         self.assertFalse(b.make_guess(2,2))
-    
+
+    def test_is_winning(self):
+        """ toimiiko voittotilanteen tunnistus """
+        b = Board(2)
+        b.tiles=[[1,9],[9,9]]
+        b.masked=[[10,10],[10,10]]
+        self.assertFalse(b.is_winning())
+        b.masked=[[0,10],[10,10]]
+        self.assertTrue(b.is_winning())
+        b.masked=[[0,0],[10,10]]
+        self.assertFalse(b.is_winning())
+
+    def test_error_conditions_in_make_guess(self):
+        """ ruudun avaus alueen ulkopuolelta tai avatussa ruudussa ei onnistu"""
+        b = Board(2)
+        b.tiles=[[1,9],[9,9]]
+        self.assertFalse(b.make_guess(2,2))
+        self.assertTrue(b.make_guess(0,0))
+        self.assertFalse(b.make_guess(0,0))
+
+    def test_get_mask(self):
+        """ maski annetaan oikein """
+        b = Board(2)
+        b.tiles=[[1,9],[9,9]]
+        self.assertEqual(b.get_mask(0,0), 10)
+
+    def test_flag_tile(self):
+        """ ruudun liputus toimii """
+        b = Board(2)
+        b.tiles=[[1,9],[9,9]]
+        self.assertEqual(b.get_mask(0,0), 10)
+        self.assertTrue(b.flag_tile(0,0))
+        self.assertEqual(b.get_mask(0,0), 11)
+        self.assertTrue(b.flag_tile(0,0))
+        self.assertEqual(b.get_mask(0,0), 12)
+        self.assertTrue(b.flag_tile(0,0))
+        self.assertEqual(b.get_mask(0,0), 10)
+
+    def test_flaf_tile_error_conditions(self):
+        """ liputus ei onnistu jos avattu, alueen ulkopuolella, outo arvo """
+        b = Board(2)
+        b.tiles=[[1,9],[9,9]]
+        b.masked[0][0]=14
+        self.assertFalse(b.flag_tile(0,0))
+        b.masked[0][0]=0
+        self.assertFalse(b.flag_tile(0,0))
+        self.assertFalse(b.flag_tile(2,2))
+        

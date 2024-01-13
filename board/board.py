@@ -93,8 +93,12 @@ class Board():
         """ tarkistaa onko peli voitettu """
         for y in range(self.size):
             for x in range(self.size):
-                if self.tiles[x][y] != 9 and self.masked[x][y]:
-                    return False
+                if self.tiles[x][y] == 9:
+                    if not self.masked[x][y]:
+                        return False
+                else:
+                    if self.masked[x][y]:
+                        return False
         return True
 
 
@@ -121,10 +125,6 @@ class Board():
         """ aseta lippu peitetylle ruudulle"""
         if self.invalid_coordinates(x, y):
             print("Koordinaatit on pelilaudan ulkopuolella", file=stderr)
-            return False
-
-        if self.masked[x][y] == 0:
-            print("Ei voi liputtaa avattua ruutua", file=stderr)
             return False
 
         match self.masked[x][y]:
