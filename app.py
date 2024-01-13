@@ -1,7 +1,7 @@
 from board.board import Board
 from tui.tui import Tui, Action
 
-b = Board(10)
+b = Board(13)
 t = Tui()
 x, y = 0, 0
 
