@@ -1,7 +1,9 @@
-from enum import Enum
+""" tui/static.py - Staattiset määritykset tui:ssa tarvittaville jutuille. """
+from enum import Enum, IntEnum
 from dataclasses import dataclass
 
 class Action(Enum):
+    """ tominnot, joita voidaan saada palautusrvona """
     QUIT = 0	# Pelin lopetus
     OPEN = 1	# Ruudun avaaminen
     FLAG = 2	# Ruudun liputus
@@ -26,8 +28,9 @@ ActionEscKeys = {
 
 @dataclass
 class TileType:
+    """ ruututyyppien tallennusmuotojen kuvaus"""
     text: str		# Teksti
-    colors: []		# Lista (väri, tausta) pareja tekstille
+    colors: []		# Lista (väri, tausta) pareja tekstin kaunistamiseen
 
 
 TileTypes = {
@@ -40,13 +43,14 @@ TileTypes = {
     6:	TileType( "[6]", [(0x9,0), (0x9,0), (0x9,0)] ),
     7:	TileType( "[7]", [(0x9,0), (0x9,0), (0x9,0)] ),
     8:	TileType( "[8]", [(0x9,0), (0x9,0), (0x9,0)] ),
-    9:	TileType( "[¤]", [(0xF,1), (0xF,1), (0xF,1)] ),
+    9:	TileType( "[@]", [(0xF,1), (0xF,1), (0xF,1)] ),
     10:	TileType( "[#]", [(0x8,7), (0x8,7), (0x8,7)] ),
     11:	TileType( "[B]", [(0x8,7), (0x1,7), (0x8,7)] ),
     12:	TileType( "[?]", [(0x8,7), (0x3,7), (0x8,7)] )
 }
 
-class Colors:
+class Colors(IntEnum):
+    """ ANSI värejä vastaavat lukuarvot """
     BLACK = 0
     RED = 1
     GREEN = 2

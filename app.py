@@ -1,3 +1,4 @@
+""" app.py - pääohjelma """
 from board.board import Board
 from tui.tui import Tui, Action
 
@@ -12,7 +13,6 @@ while True:
     action, x, y = t.matrix_selector(b.get_view(), x, y)
     match action:
         case Action.QUIT:
-            #            t.draw_matrix(b.get_view(),-1,-1)
             print("LOPETUS!")
             break
         case Action.OPEN:
@@ -20,7 +20,7 @@ while True:
                 t.draw_matrix(b.get_view(), -1, -1)
                 print("KUOLEMA!")
                 break
-            elif b.is_winning():
+            if b.is_winning():
                 t.draw_matrix(b.get_view(), -1, -1)
                 print("VOITTO!")
                 break
