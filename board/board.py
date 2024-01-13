@@ -37,14 +37,17 @@ class Board():
     def invalid_coordinates(self, x, y):
         return x < 0 or x >= self.size or y < 0 or y >= self.size
         
-    def get_neighbours_coords(self, x, y, coordinates = None):
-        if not coordinates:
-            coordinates=[]
+    def get_neighbours_coords(self, x, y, include_home = False):
         offsets = (
+            (-1,-1), (0,-1), (1,-1),
+            (-1, 0), (0, 0), (1, 0),
+            (-1, 1), (0, 1), (1, 1)
+        ) if include_home else (
             (-1,-1), (0,-1), (1,-1),
             (-1, 0),         (1, 0),
             (-1, 1), (0, 1), (1, 1)
         )
+        coordinates=[]
         for dx,dy in offsets:
             if not self.invalid_coordinates(x+dx, y+dy):
                 coordinates.append( (x+dx, y+dy) )
@@ -81,12 +84,10 @@ class Board():
         if not area:
             area.add((x,y))
         to_test = []
-        for dx, dy in ( (0,-1), (-1,0), (1,0), (0,1) ):
-            if self.invalid_coordinates(x+dx, y+dy):
-                continue
-            if self.tiles[x+dx][y+dy] == 0 and (x+dx,y+dy) not in area:
-                to_test.append((x+dx, y+dy))
-                area.add((x+dx, y+dy))
+        for nx, ny in self.get_neighbours_coords(x, y):
+            if self.tiles[nx][ny] == 0 and (nx,ny) not in area:
+                to_test.append((nx, ny))
+                area.add((nx, ny))
         for tx, ty in to_test:
             area=area.union(self.collect_area(tx, ty, area))
         return area
@@ -110,7 +111,7 @@ class Board():
             
         if self.tiles[x][y] == 0:
             for cx, cy in self.collect_area( x, y ):
-                for nx, ny in self.get_neighbours_coords(cx, cy, [(0,0)]):
+                for nx, ny in self.get_neighbours_coords(cx, cy, True):
                     self.masked[nx][ny] = 0
                                 
         return True
