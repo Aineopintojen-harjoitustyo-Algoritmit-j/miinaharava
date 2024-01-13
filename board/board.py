@@ -3,12 +3,22 @@ from sys import stderr
 from copy import deepcopy
 
 class Board():
-    def __init__(self, size = 10):
+    def __init__(self, size = 10, bombs = 0):
+        # Lauta pitää olla vähintään 2x2, jotta on jotain pelattavaa
+        size = 2 if size < 2 else size
+        size = 50 if size > 50 else size
         self.size = size
+            
+        # Pommeja pitää olla vähintään yksi, kuten tyhjiäkin
+        bombs = size*size*size//100 if bombs < 1 else bombs
+        bombs = size*size-1 if bombs>=size*size else bombs
+        bombs = 1 if bombs == 0 else bombs
+        self.bombs = bombs
+
         self.tiles = []
         self.masked = []
         self.initialize_tiles( size )
-        self.randomize_bombs( size )
+        self.randomize_bombs( bombs )
         self.calculate_neighbours()
         
     def initialize_tiles(self, size):
@@ -26,20 +36,28 @@ class Board():
                 
     def invalid_coordinates(self, x, y):
         return x < 0 or x >= self.size or y < 0 or y >= self.size
+        
+    def get_neighbours_coords(self, x, y, coordinates = None):
+        if not coordinates:
+            coordinates=[]
+        offsets = (
+            (-1,-1), (0,-1), (1,-1),
+            (-1, 0),         (1, 0),
+            (-1, 1), (0, 1), (1, 1)
+        )
+        for dx,dy in offsets:
+            if not self.invalid_coordinates(x+dx, y+dy):
+                coordinates.append( (x+dx, y+dy) )
+        return coordinates
             
     def calculate_neighbours(self):
-        neighbours = (  (-1,-1), (0,-1), (1,-1),
-                        (-1, 0),         (1, 0),
-                        (-1, 1), (0, 1), (1, 1) )
         for y in range(self.size):
             for x in range(self.size):
                 if self.tiles[x][y] == 9:
                     continue
                 neighbouring_bombs = 0
-                for dx,dy in neighbours:
-                    if self.invalid_coordinates(x+dx, y+dy):
-                        continue
-                    if self.tiles[x+dx][y+dy] == 9:
+                for nx, ny in self.get_neighbours_coords(x,y):
+                    if self.tiles[nx][ny] == 9:
                         neighbouring_bombs += 1
                 self.tiles[x][y] = neighbouring_bombs
         
@@ -92,9 +110,8 @@ class Board():
             
         if self.tiles[x][y] == 0:
             for cx, cy in self.collect_area( x, y ):
-                for dx, dy in ( (0,-1), (-1,0), (0,0), (1,0), (0,1) ):
-                    if not self.invalid_coordinates(cx+dx, cy+dy):
-                        self.masked[cx+dx][cy+dy] = 0
+                for nx, ny in self.get_neighbours_coords(cx, cy, [(0,0)]):
+                    self.masked[nx][ny] = 0
                                 
         return True
         
