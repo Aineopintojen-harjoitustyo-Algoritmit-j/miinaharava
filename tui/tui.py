@@ -1,9 +1,12 @@
+""" tui/tui.py - teksikäyttöliittymä """
+# pylint: disable = multiple-imports
 import termios, fcntl, sys, os
 from time import sleep
 from tui.static import Action, ActionKeys, ActionEscKeys, Colors, TileTypes
 
 
 class Tui():
+    """ Tui - Luokka käyttäjän interaktiota varten """
     def __init__(self):
         # Vaatii hieman terminaaliasetusten muokkaamista jotta yksittäiset
         # napin painallukset voidaan lukea
@@ -25,44 +28,51 @@ class Tui():
         fcntl.fcntl(fd, fcntl.F_SETFL, self.oldflags)
 
     def set_color(self, color):
-        if color >= 0 and color < 16:
+        """ asettaa tekstin värin """
+        if color in range(16):
             print(end=f"\033[{'1;' if color//8 else ''}3{color%8}m")
 
     def set_bg(self, color):
-        if color >= 0 and color < 8:
+        """ asettaa tekstin taustan värin"""
+        if color in range(8):
             print(end=f"\033[4{color}m")
 
     def cursor_up(self, lines):
+        """ liikuttaa kursoria ylöspäin"""
         print(end=f"\033[{lines}F")
 
     def reset_color(self):
+        """ resetoi tekstin värin ja muut attribuutit perusarvoille """
         print(end="\033[0m")
 
     def draw_tile(self, tile, hilighted):
-        for i in range(len(TileTypes[tile].text)):
-            color, bg = TileTypes[tile].colors[i]
+        """ "piirtää" yhden ruudun """
+        for ch, colors in zip(TileTypes[tile].text, TileTypes[tile].colors):
+            color, bg = colors
             self.set_color(Colors.BLACK if hilighted else color)
             self.set_bg(Colors.CYAN if hilighted else bg)
-            print(end=TileTypes[tile].text[i])
+            print(end=ch)
             self.reset_color()
 
     def draw_matrix(self, matrix, hx, hy):
+        """ "piirtää" ruudukon """
         self.cursor_up(len(matrix[0]))
+        # pylint: disable=consider-using-enumerate
         for y in range(len(matrix[0])):
             for x in range(len(matrix)):
-                self.draw_tile(matrix[x][y],
-                               x == hx and y == hy)
+                self.draw_tile(matrix[x][y], x == hx and y == hy)
             print()
 
     def read_action(self):
+        """ lukee näppäimistölä käyttäjän toiminnon """
         escape = 0
         while True:
             try:
-                # Ehkä riittää jos näppäimiä luetaan 200x sekunnissa
+            # Ehkä riittää jos näppäimiä luetaan 200x sekunnissa
                 sleep(0.005)
                 c = sys.stdin.read(1)
-            except:
-                continue
+            except KeyboardInterrupt:
+                return Action.QUIT
             if escape:
                 if c in "[0123456789":
                     continue
@@ -70,14 +80,13 @@ class Tui():
                     return ActionEscKeys[c]
                 escape = 0
                 continue
-            else:
-                if c == '\033':
-                    escape = 1
-                    continue
-                if c in ActionKeys:
-                    return ActionKeys[c]
+            if c in ActionKeys:
+                return ActionKeys[c]
+            if c == '\033':
+                escape = 1
 
     def matrix_selector(self, matrix, x, y):
+        """ piirtää ruudukon ja antaa käyttäjän valita nuolinäppäimillä """
         self.draw_matrix(matrix, x, y)
         while True:
             action = self.read_action()

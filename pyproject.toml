@@ -13,14 +13,14 @@ python = "^3.10"
 pytest = "^7.4.4"
 coverage = "^7.4.0"
 pylint = "^3.0.3"
-autopep8 = "^2.0.4"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pylint.main]
-source-roots = "./"
+recursive = true
+source-roots = ["./"]
 
 [tool.pylint.basic]
 docstring-min-length = 0

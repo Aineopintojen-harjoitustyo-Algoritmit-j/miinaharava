@@ -2,27 +2,34 @@
 from board.board import Board
 from tui.tui import Tui, Action
 
-b = Board(13)
-t = Tui()
-x, y = 0, 0
+# pylint: disable = too-few-public-methods
+class App:
+    """ App - Luokka pääohjelmalle"""
+    def __init__(self):
+        self.b = Board(13)
+        self.t = Tui()
 
-for _ in range(b.size):
-    print()
+    def run(self):
+        """ käynnistää pääohjelman """
+        x, y = 0, 0
+        # Printataan tyhjää tilaa, jotta pelalauta mahtuu ruudulle
+        for _ in range(self.b.size):
+            print()
 
-while True:
-    action, x, y = t.matrix_selector(b.get_view(), x, y)
-    match action:
-        case Action.QUIT:
-            print("LOPETUS!")
-            break
-        case Action.OPEN:
-            if b.get_mask(x, y) and not b.make_guess(x, y):
-                t.draw_matrix(b.get_view(), -1, -1)
-                print("KUOLEMA!")
-                break
-            if b.is_winning():
-                t.draw_matrix(b.get_view(), -1, -1)
-                print("VOITTO!")
-                break
-        case Action.FLAG:
-            b.flag_tile(x, y)
+        while True:
+            action, x, y = self.t.matrix_selector(self.b.get_view(), x, y)
+            match action:
+                case Action.QUIT:
+                    print("LOPETUS!")
+                    break
+                case Action.OPEN:
+                    if self.b.get_mask(x, y) and not self.b.make_guess(x, y):
+                        self.t.draw_matrix(self.b.get_view(), -1, -1)
+                        print("KUOLEMA!")
+                        break
+                    if self.b.is_winning():
+                        self.t.draw_matrix(self.b.get_view(), -1, -1)
+                        print("VOITTO!")
+                        break
+                case Action.FLAG:
+                    self.b.flag_tile(x, y)

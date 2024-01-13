@@ -46,4 +46,7 @@ jobs:
         uses: codecov/codecov-action@v3
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        
+          
+      # pylint
+      - name: Run pylint against the code
+        run: poetry run python3 -m pylint -v .
