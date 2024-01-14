@@ -71,13 +71,17 @@ class TestBoardClass(unittest.TestCase):
         self.assertEqual(b.get_mask(0,0), 13)
         self.assertTrue(b.flag(0,0))
         self.assertEqual(b.get_mask(0,0), 10)
+        self.assertTrue(b.flag(0,0,13))
+        self.assertEqual(b.get_mask(0,0), 13)
 
     def test_flag_error_conditions(self):
         """ liputus ei onnistu jos avattu, alueen ulkopuolella, outo arvo """
         b = Board(2)
         b.tiles=[[1,9],[9,9]]
-        b.masked[0][0]=14
+        b.masked[0][0]=6
         self.assertFalse(b.flag(0,0))
+        b.masked[0][0]=10
+        self.assertFalse(b.flag(0,0,4))
         b.masked[0][0]=0
         self.assertFalse(b.flag(0,0))
         self.assertFalse(b.flag(2,2))
