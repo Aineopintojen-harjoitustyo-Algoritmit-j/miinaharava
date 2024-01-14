@@ -13,17 +13,21 @@ class Action(Enum):
     RIGHT = 6
     UP = 7
     DOWN = 8
+    TOP = 9
+    BOTTOM = 10
+    BEGIN = 11
+    END = 12
+    NOOP = 13
 
+# ActionKeys - Ohjelma vertaa syötteen alkua näihin ja palauttaa ekan
 ActionKeys = {
-    'w': Action.UP,	'a': Action.LEFT,	's': Action.DOWN,
-    'd': Action.RIGHT,	' ': Action.OPEN,	'\n': Action.OPEN,
-    'f': Action.FLAG,	'm': Action.FLAG,	'q': Action.QUIT
-}
-
-
-ActionEscKeys = {
-    '': Action.QUIT,	'A': Action.UP,		'D': Action.LEFT,
-    'C': Action.RIGHT,	'B': Action.DOWN
+    "\033[A": Action.UP,	"\033[D": Action.LEFT,
+    "\033[C": Action.RIGHT,	'\033[B': Action.DOWN,	"\033[5~": Action.TOP,
+    "\033[6~": Action.BOTTOM,	"\033[7~": Action.BEGIN,"\033[8~": Action.END,
+    "\033[": Action.NOOP,	"\033": Action.QUIT,
+    "w": Action.UP,		"a": Action.LEFT,	"s": Action.DOWN,
+    "d": Action.RIGHT,		" ": Action.OPEN,	"\n": Action.OPEN,
+    "f": Action.FLAG,		"m": Action.FLAG,	"q": Action.QUIT,
 }
 
 @dataclass

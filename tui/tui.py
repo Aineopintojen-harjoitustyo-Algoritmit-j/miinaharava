@@ -2,7 +2,7 @@
 # pylint: disable = multiple-imports
 import termios, fcntl, sys, os
 from time import sleep
-from tui.static import Action, ActionKeys, ActionEscKeys, Colors, TileTypes
+from tui.static import Action, ActionKeys, Colors, TileTypes
 
 
 class Tui():
@@ -21,29 +21,35 @@ class Tui():
         self.oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
         fcntl.fcntl(fd, fcntl.F_SETFL, self.oldflags | os.O_NONBLOCK)
 
+
     def __del__(self):
         # palautetaan terminaali takaisin alkupetäiseen uskoon
         fd = sys.stdin.fileno()
         termios.tcsetattr(fd, termios.TCSAFLUSH, self.oldterm)
         fcntl.fcntl(fd, fcntl.F_SETFL, self.oldflags)
 
+
     def set_color(self, color):
         """ asettaa tekstin värin """
         if color in range(16):
             print(end=f"\033[{'1;' if color//8 else ''}3{color%8}m")
+
 
     def set_bg(self, color):
         """ asettaa tekstin taustan värin"""
         if color in range(8):
             print(end=f"\033[4{color}m")
 
+
     def cursor_up(self, lines):
         """ liikuttaa kursoria ylöspäin"""
         print(end=f"\033[{lines}F")
 
+
     def reset_color(self):
         """ resetoi tekstin värin ja muut attribuutit perusarvoille """
         print(end="\033[0m")
+
 
     def draw_tile(self, tile, hilighted):
         """ "piirtää" yhden ruudun """
@@ -54,6 +60,7 @@ class Tui():
             print(end=ch)
             self.reset_color()
 
+
     def draw_matrix(self, matrix, hx, hy):
         """ "piirtää" ruudukon """
         self.cursor_up(len(matrix[0]))
@@ -63,27 +70,21 @@ class Tui():
                 self.draw_tile(matrix[x][y], x == hx and y == hy)
             print()
 
+
     def read_action(self):
         """ lukee näppäimistölä käyttäjän toiminnon """
-        escape = 0
         while True:
+            # Ehkä riittää jos näppäimiä luetaan 50x sekunnissa
+            sleep(0.02)
             try:
-            # Ehkä riittää jos näppäimiä luetaan 200x sekunnissa
-                sleep(0.005)
-                c = sys.stdin.read(1)
+                keycode = sys.stdin.read(16)
             except KeyboardInterrupt:
                 return Action.QUIT
-            if escape:
-                if c in "[0123456789":
-                    continue
-                if c in ActionEscKeys:
-                    return ActionEscKeys[c]
-                escape = 0
-                continue
-            if c in ActionKeys:
-                return ActionKeys[c]
-            if c == '\033':
-                escape = 1
+            if keycode:
+                for key, action in ActionKeys.items():
+                    if keycode.startswith(key):
+                        return action
+
 
     def matrix_selector(self, matrix, x, y):
         """ piirtää ruudukon ja antaa käyttäjän valita nuolinäppäimillä """
