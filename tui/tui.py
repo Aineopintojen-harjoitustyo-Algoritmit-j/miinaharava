@@ -47,7 +47,8 @@ class Tui():
         # pylint: disable=consider-using-enumerate
         for y in range(len(matrix[0])):
             for x in range(len(matrix)):
-                self.draw_tile(matrix[x][y], x == hx and y == hy)
+                hilight = matrix[x][y] != 9 and x == hx and y == hy
+                self.draw_tile(matrix[x][y], hilight)
             print()
 
 
@@ -74,7 +75,7 @@ class Tui():
             match action:
                 case Action.QUIT:
                     return (action, x, y)
-                case Action.OPEN | Action.FLAG:
+                case Action.OPEN | Action.FLAG | Action.BOMB | Action.SAFE:
                     if matrix[x][y] >= 10:
                         return (action, x, y)
                 case Action.UP:
@@ -85,6 +86,14 @@ class Tui():
                     y = y+1 if y < len(matrix[0])-1 else y
                 case Action.RIGHT:
                     x = x+1 if x < len(matrix)-1 else x
+                case Action.TOP:
+                    y = 0
+                case Action.BOTTOM:
+                    y = len(matrix[0])-1
+                case Action.BEGIN:
+                    x = 0
+                case Action.END:
+                    x = len(matrix)-1
             self.draw_matrix(matrix, x, y)
 
 

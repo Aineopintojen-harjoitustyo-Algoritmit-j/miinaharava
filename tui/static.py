@@ -9,7 +9,7 @@ class Action(Enum):
     FLAG = 2	# Ruudun liputus
     HINT = 3	# Anna vihjeet
     AUTO = 4	# Pelaa automaattisesti
-    LEFT = 5
+    LEFT = 5	# Liikkumiset...
     RIGHT = 6
     UP = 7
     DOWN = 8
@@ -17,18 +17,35 @@ class Action(Enum):
     BOTTOM = 10
     BEGIN = 11
     END = 12
-    NOOP = 13
+    NOOP = 13	# ei mitään - tarvitaan, ettei mätsää ansikoodeja esciin
+    BOMB = 14	# merkkaa pommi
+    SAFE = 15	# merkkaa turvallinen
 
 # ActionKeys - Ohjelma vertaa syötteen alkua näihin ja palauttaa ekan
 ActionKeys = {
     "\033[A": Action.UP,	"\033[D": Action.LEFT,
     "\033[C": Action.RIGHT,	'\033[B': Action.DOWN,	"\033[5~": Action.TOP,
     "\033[6~": Action.BOTTOM,	"\033[7~": Action.BEGIN,"\033[8~": Action.END,
-    "\033[": Action.NOOP,	"\033": Action.QUIT,
+    "\033[": Action.NOOP,	"\033": Action.QUIT,	"t": Action.SAFE,
     "w": Action.UP,		"a": Action.LEFT,	"s": Action.DOWN,
     "d": Action.RIGHT,		" ": Action.OPEN,	"\n": Action.OPEN,
     "f": Action.FLAG,		"m": Action.FLAG,	"q": Action.QUIT,
+    "p": Action.BOMB,		"x": Action.BOMB,	"o": Action.SAFE,
+    "l": Action.QUIT,
 }
+
+KEY_DESCRIPTIONS = """
+Liikkuminen:
+    YLÖS,ALAS,VASEN,OIKEA,PGDN,PGUP,HOME,END,w,a,s,d
+Merkitseminen:
+    m - merkitse
+    p,x - pommi
+    t,o - turvallinen
+Avaaminen:
+    ENTER, SPACE
+Lopetus:
+    l,q,ESC    
+"""
 
 @dataclass
 class TileType:
@@ -49,7 +66,7 @@ TileTypes = {
     8:	TileType( "[8]", [(0x9,0), (0x9,0), (0x9,0)] ),
     9:	TileType( "[@]", [(0xF,1), (0xF,1), (0xF,1)] ),
     10:	TileType( "[#]", [(0x8,7), (0x8,7), (0x8,7)] ),
-    11:	TileType( "[B]", [(0x8,7), (0x1,7), (0x8,7)] ),
-    12:	TileType( "[ ]", [(0x8,7), (0x3,7), (0x8,7)] ),
+    11:	TileType( "[×]", [(0x8,7), (0x1,7), (0x8,7)] ),
+    12:	TileType( "[•]", [(0x8,7), (0x2,7), (0x8,7)] ),
     13:	TileType( "[?]", [(0x8,7), (0x0,7), (0x8,7)] )
 }
