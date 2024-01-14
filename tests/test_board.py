@@ -70,7 +70,7 @@ class TestBoardClass(unittest.TestCase):
         self.assertTrue(b.flag_tile(0,0))
         self.assertEqual(b.get_mask(0,0), 10)
 
-    def test_flaf_tile_error_conditions(self):
+    def test_flag_tile_error_conditions(self):
         """ liputus ei onnistu jos avattu, alueen ulkopuolella, outo arvo """
         b = Board(2)
         b.tiles=[[1,9],[9,9]]
@@ -79,4 +79,13 @@ class TestBoardClass(unittest.TestCase):
         b.masked[0][0]=0
         self.assertFalse(b.flag_tile(0,0))
         self.assertFalse(b.flag_tile(2,2))
+
+    def test_reveal(self):
+        """ paljastuksen jälkeen näkyy laatat sellaisenaan """
+        b = Board(2)
+        b.reveal()
+        t = b.tiles
+        v = b.get_view()
+        for i in range(2):
+            self.assertEqual(v[i],t[i])
         

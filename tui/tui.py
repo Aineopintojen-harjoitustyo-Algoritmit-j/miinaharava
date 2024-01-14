@@ -27,6 +27,7 @@ class Tui():
         fd = sys.stdin.fileno()
         termios.tcsetattr(fd, termios.TCSAFLUSH, self.oldterm)
         fcntl.fcntl(fd, fcntl.F_SETFL, self.oldflags)
+        print()
 
 
     def set_color(self, color):
@@ -106,3 +107,38 @@ class Tui():
                 case Action.RIGHT:
                     x = x+1 if x < len(matrix)-1 else x
             self.draw_matrix(matrix, x, y)
+
+
+    def show_board_with_text(self, matrix, x, y, text):
+        """ näyttää laudan, tekstin alla ja jää odottelemaan nappia """
+        self.draw_matrix(matrix, x, y)
+        print(text)
+        self.cursor_up(1)
+        self.read_action()
+
+
+    def game_begin(self, size):
+        """ ruudun alustus ja lähtökoordinaatien määritys """
+        for _ in range(size+1):
+            print()
+        self.cursor_up(1)
+        return size//2, size//2
+
+
+    def game_over(self, matrix, x, y):
+        """ näyttää pelin lopputilanteen ja odottaa nappia """
+        self.show_board_with_text(matrix, x, y,
+                "KUOLEMA! ...näppäimellä eteenpäin...")
+
+
+    def game_win(self, matrix, x, y):
+        """ näyttäää pelin lopputilanteen ja odottaa nappia """
+        self.show_board_with_text(matrix, x, y,
+                "VOITTO! ...näppäimellä eteenpäin...")
+
+
+    def game_end(self, matrix):
+        """ pelin lopetus """
+        self.show_board_with_text(matrix, -1, -1,
+                "PELI OHI! ...näppäimellä eteenpäin...")
+        print()

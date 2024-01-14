@@ -163,3 +163,7 @@ class Board():
                     self.masked[nx][ny] = 0
 
         return True
+
+    def reveal(self):
+        """ näytä koko lauta """
+        self.masked = [[0 for _ in range(self.size)] for _ in range(self.size)]
