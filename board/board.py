@@ -121,7 +121,7 @@ class Board():
         return self.masked[x][y]
 
 
-    def flag_tile(self, x, y):
+    def flag(self, x, y):
         """ aseta lippu peitetylle ruudulle"""
         if self.invalid_coordinates(x, y):
             print("Koordinaatit on pelilaudan ulkopuolella", file=stderr)
@@ -131,10 +131,10 @@ class Board():
             case 0:
                 print("Ei voi liputtaa avattua ruutua", file=stderr)
                 return False
-            case 10 | 11:
+            case 10 | 11 | 12:
                 self.masked[x][y]+=1
                 return True
-            case 12:
+            case 13:
                 self.masked[x][y]=10
                 return True
 
@@ -142,7 +142,7 @@ class Board():
         return False
 
 
-    def make_guess(self, x, y):
+    def guess(self, x, y):
         """ tee arvaus """
         if self.invalid_coordinates(x, y):
             print("Koordinaatit on pelilaudan ulkopuolella", file=stderr)

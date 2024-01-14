@@ -2,7 +2,8 @@
 # pylint: disable = multiple-imports
 import termios, fcntl, sys, os
 from time import sleep
-from tui.static import Action, ActionKeys, Colors, TileTypes
+from tui.static import Action, ActionKeys, TileTypes
+from tui.ansi import Ansi
 
 
 class Tui():
@@ -30,41 +31,19 @@ class Tui():
         print()
 
 
-    def set_color(self, color):
-        """ asettaa tekstin värin """
-        if color in range(16):
-            print(end=f"\033[{'1;' if color//8 else ''}3{color%8}m")
-
-
-    def set_bg(self, color):
-        """ asettaa tekstin taustan värin"""
-        if color in range(8):
-            print(end=f"\033[4{color}m")
-
-
-    def cursor_up(self, lines):
-        """ liikuttaa kursoria ylöspäin"""
-        print(end=f"\033[{lines}F")
-
-
-    def reset_color(self):
-        """ resetoi tekstin värin ja muut attribuutit perusarvoille """
-        print(end="\033[0m")
-
-
     def draw_tile(self, tile, hilighted):
         """ "piirtää" yhden ruudun """
         for ch, colors in zip(TileTypes[tile].text, TileTypes[tile].colors):
             color, bg = colors
-            self.set_color(Colors.BLACK if hilighted else color)
-            self.set_bg(Colors.CYAN if hilighted else bg)
+            Ansi.color(Ansi.BLACK if hilighted else color)
+            Ansi.bg(Ansi.CYAN if hilighted else bg)
             print(end=ch)
-            self.reset_color()
+            Ansi.reset()
 
 
     def draw_matrix(self, matrix, hx, hy):
         """ "piirtää" ruudukon """
-        self.cursor_up(len(matrix[0]))
+        Ansi.cup(len(matrix[0]))
         # pylint: disable=consider-using-enumerate
         for y in range(len(matrix[0])):
             for x in range(len(matrix)):
@@ -113,15 +92,14 @@ class Tui():
         """ näyttää laudan, tekstin alla ja jää odottelemaan nappia """
         self.draw_matrix(matrix, x, y)
         print(text)
-        self.cursor_up(1)
+        Ansi.cup(1)
         self.read_action()
 
 
     def game_begin(self, size):
         """ ruudun alustus ja lähtökoordinaatien määritys """
-        for _ in range(size+1):
-            print()
-        self.cursor_up(1)
+        print(end="\n"*(size+1))
+        Ansi.cup(1)
         return size//2, size//2
 
 

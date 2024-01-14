@@ -24,7 +24,7 @@ class Game:
                 return False
             case Action.OPEN:
                 if self.board.get_mask(self.x, self.y):
-                    if not self.board.make_guess(self.x, self.y):
+                    if not self.board.guess(self.x, self.y):
                         self.ui.game_over(
                                 self.board.get_view(), self.x, self.y
                         )
@@ -33,5 +33,5 @@ class Game:
                     self.ui.game_win(self.board.get_view(), self.x, self.y)
                     return False
             case Action.FLAG:
-                self.board.flag_tile(self.x, self.y)
+                self.board.flag(self.x, self.y)
         return True
