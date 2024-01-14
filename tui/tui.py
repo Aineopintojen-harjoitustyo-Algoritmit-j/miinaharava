@@ -98,7 +98,7 @@ class Tui():
                     x = len(matrix)-1
                 case Action.HINT:
                     if self.bot is not None:
-                        return (Action.BOMB, 0, 0)
+                        return self.bot.hint(matrix, x, y)
             self.draw_matrix(matrix, x, y)
 
 
