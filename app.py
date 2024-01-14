@@ -8,7 +8,7 @@ class App:
     """ App - Luokka pääohjelmalle"""
     def __init__(self):
         self.board = Board()
-        self.ui = Tui()
+        self.ui = Tui("just testing bot here")
         self.game = Game(self.board,self.ui)
 
     def run(self):

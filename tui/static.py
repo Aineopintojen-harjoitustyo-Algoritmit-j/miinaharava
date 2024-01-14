@@ -31,7 +31,7 @@ ActionKeys = {
     "d": Action.RIGHT,		" ": Action.OPEN,	"\n": Action.OPEN,
     "f": Action.FLAG,		"m": Action.FLAG,	"q": Action.QUIT,
     "p": Action.BOMB,		"x": Action.BOMB,	"o": Action.SAFE,
-    "l": Action.QUIT,
+    "l": Action.QUIT,		"?": Action.HINT,	"b": Action.HINT
 }
 
 KEY_DESCRIPTIONS = """
@@ -43,6 +43,8 @@ Merkitseminen:
     t,o - turvallinen
 Avaaminen:
     ENTER, SPACE
+Vinkki:
+    ?, b - pyydä botilta vihje
 Lopetus:
     l,q,ESC    
 """

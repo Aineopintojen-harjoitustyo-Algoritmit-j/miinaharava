@@ -8,7 +8,7 @@ from tui.ansi import Ansi
 
 class Tui():
     """ Tui - Luokka käyttäjän interaktiota varten """
-    def __init__(self):
+    def __init__(self, bot = None):
         # Vaatii hieman terminaaliasetusten muokkaamista jotta yksittäiset
         # napin painallukset voidaan lukea
         # https://stackoverflow.com/questions/983354/how-do-i-wait-for-a-pressed-key
@@ -21,6 +21,8 @@ class Tui():
 
         self.oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
         fcntl.fcntl(fd, fcntl.F_SETFL, self.oldflags | os.O_NONBLOCK)
+
+        self.bot = bot
 
 
     def __del__(self):
@@ -94,6 +96,9 @@ class Tui():
                     x = 0
                 case Action.END:
                     x = len(matrix)-1
+                case Action.HINT:
+                    if self.bot is not None:
+                        return (Action.BOMB, 0, 0)
             self.draw_matrix(matrix, x, y)
 
 
