@@ -110,11 +110,11 @@ class Tui():
         self.read_action()
 
 
-    def game_begin(self, size):
+    def game_begin(self, width, height):
         """ ruudun alustus ja lähtökoordinaatien määritys """
-        print(end="\n"*(size+1))
+        print(end="\n"*(height+1))
         Ansi.cup(1)
-        return size//2, size//2
+        return width//2, height//2
 
 
     def game_over(self, matrix, x, y):

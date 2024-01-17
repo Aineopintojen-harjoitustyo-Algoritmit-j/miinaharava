@@ -6,7 +6,10 @@ class Game:
     def __init__(self, board, ui):
         self.board = board
         self.ui = ui
-        self.x, self.y = self.ui.game_begin(self.board.size)
+        self.x, self.y = self.ui.game_begin(
+                self.board.get_width(),
+                self.board.get_height()
+        )
 
 
     def __del__(self):

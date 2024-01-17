@@ -9,7 +9,7 @@ from bots.bad import BadBot
 class App:
     """ App - Luokka pääohjelmalle"""
     def __init__(self):
-        self.board = Board()
+        self.board = Board(30,16,99)
         self.bot = BadBot()
         self.ui = Tui(self.bot)
         self.game = Game(self.board,self.ui)

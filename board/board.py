@@ -7,36 +7,44 @@ class Board():
     """	Board - Luokka joka pitää huolen pelilaudasta ja siihen kohdistuvista
                 siirroista.
     """
-    def __init__(self, size = 9, bombs = 10):
+    def __init__(self, width = 9, height = 9, bombs = 10):
         # Lauta pitää olla vähintään 2x2, jotta on jotain pelattavaa
-        size = 2 if size < 2 else size
-        size = 50 if size > 50 else size
-        self.size = size
+        #size = 2 if size < 2 else size
+        #size = 50 if size > 50 else size
+        #self.size = size
+        width = 2 if width < 2 else width
+        width = 50 if width > 50 else width
+        self.width = width
+
+        height = 2 if height < 2 else height
+        height = 50 if height > 50 else height
+        self.height = height
 
         # Pommeja pitää olla vähintään yksi, kuten tyhjiäkin
-        bombs = size*size*size//100 if bombs < 1 else bombs
-        bombs = size*size-1 if bombs>=size*size else bombs
+        #bombs = size*size*size//100 if bombs < 1 else bombs
+        bombs = width*height-1 if bombs>=width*height else bombs
         bombs = 1 if bombs == 0 else bombs
         self.bombs = bombs
 
         self.tiles = []
         self.masked = []
-        self.initialize_tiles( size )
+        self.initialize_tiles()
         self.randomize_bombs( bombs )
         self.calculate_neighbours()
 
 
-    def initialize_tiles(self, size):
+    def initialize_tiles(self):
         """ alustaa pelilaudan matriisit """
-        self.tiles = [[0 for _ in range(size)] for _ in range(size)]
-        self.masked = [[12 for _ in range(size)] for _ in range(size)]
+        w, h = self.width, self.height
+        self.tiles = [[0 for _ in range(h)] for _ in range(w)]
+        self.masked = [[12 for _ in range(h)] for _ in range(w)]
 
 
     def randomize_bombs(self, bomb_count):
         """ arpoo pelilaudalle pommit """
         for _ in range(bomb_count):
             while True:
-                x, y = randrange(0,self.size), randrange(0,self.size)
+                x, y = randrange(0,self.width), randrange(0,self.height)
                 if self.tiles[x][y] != 0:
                     continue
                 self.tiles[x][y]=9
@@ -45,8 +53,8 @@ class Board():
 
     def calculate_neighbours(self):
         """ laskee naapurissa olevien pommien määrät valmiiksi laudalle """
-        for y in range(self.size):
-            for x in range(self.size):
+        for y in range(self.height):
+            for x in range(self.width):
                 if self.tiles[x][y] == 9:
                     continue
                 neighbouring_bombs = 0
@@ -58,7 +66,7 @@ class Board():
 
     def invalid_coordinates(self, x, y):
         """ onko koordinaatit pelilaudan ulkopuolella """
-        return x < 0 or x >= self.size or y < 0 or y >= self.size
+        return x < 0 or x >= self.width or y < 0 or y >= self.height
 
 
     def get_neighbours_coords(self, x, y, include_home = False):
@@ -82,8 +90,8 @@ class Board():
     def get_view(self):
         """ antaa matriisin nykyisestä pelinäkymästä """
         view = deepcopy(self.masked)
-        for y in range(self.size):
-            for x in range(self.size):
+        for y in range(self.height):
+            for x in range(self.width):
                 if not view[x][y]:
                     view[x][y]=self.tiles[x][y]
         return view
@@ -91,8 +99,8 @@ class Board():
 
     def is_winning(self):
         """ tarkistaa onko peli voitettu """
-        for y in range(self.size):
-            for x in range(self.size):
+        for y in range(self.height):
+            for x in range(self.width):
                 if self.tiles[x][y] == 9:
                     if not self.masked[x][y]:
                         return False
@@ -167,4 +175,13 @@ class Board():
 
     def reveal(self):
         """ näytä koko lauta """
-        self.masked = [[0 for _ in range(self.size)] for _ in range(self.size)]
+        w, h = self.width, self.height
+        self.masked = [[0 for _ in range(h)] for _ in range(w)]
+
+    def get_width(self):
+        """ palauttaa laudan leveyden """
+        return self.width
+
+    def get_height(self):
+        """ palauttaa laudan korkeuden """
+        return self.height
