@@ -7,7 +7,7 @@ class Board():
     """	Board - Luokka joka pitää huolen pelilaudasta ja siihen kohdistuvista
                 siirroista.
     """
-    def __init__(self, size = 10, bombs = 0):
+    def __init__(self, size = 9, bombs = 10):
         # Lauta pitää olla vähintään 2x2, jotta on jotain pelattavaa
         size = 2 if size < 2 else size
         size = 50 if size > 50 else size
@@ -29,7 +29,7 @@ class Board():
     def initialize_tiles(self, size):
         """ alustaa pelilaudan matriisit """
         self.tiles = [[0 for _ in range(size)] for _ in range(size)]
-        self.masked = [[10 for _ in range(size)] for _ in range(size)]
+        self.masked = [[12 for _ in range(size)] for _ in range(size)]
 
 
     def randomize_bombs(self, bomb_count):

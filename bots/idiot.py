@@ -5,13 +5,13 @@ class IdiotBot(Bot):
     """ IdiotBot - merkistsee kaikki turvallisiksi avata """
     # pylint: disable = too-few-public-methods
 
-    def hint(self, matrix, x, y):
+    def hint(self, matrix, cursor_x, cursor_y):
         """ merkitsee jonkin ruudun """
-        super().hint(matrix, x, y)
+        super().hint(matrix, cursor_x, cursor_y)
         # pylint: disable = consider-using-enumerate
         for ty in range(len(matrix[0])):
             for tx in range(len(matrix)):
-                if matrix[tx][ty]==10:
+                if matrix[tx][ty]==12:
                     return(Action.SAFE, tx, ty)
-        return (Action.NOOP, x, y)
+        return (Action.NOOP, cursor_x, cursor_y)
     

@@ -35,7 +35,7 @@ class Game:
             case Action.FLAG:
                 self.board.flag(self.x, self.y)
             case Action.BOMB:
-                self.board.flag(self.x, self.y, 11)
+                self.board.flag(self.x, self.y, 10)
             case Action.SAFE:
-                self.board.flag(self.x, self.y, 12)
+                self.board.flag(self.x, self.y, 11)
         return True

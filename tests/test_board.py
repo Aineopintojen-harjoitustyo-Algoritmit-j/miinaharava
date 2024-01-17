@@ -21,13 +21,13 @@ class TestBoardClass(unittest.TestCase):
         b.tiles=[[0,0,0],[0,1,1],[0,1,9]]
 
         v = b.get_view()
-        t = [[10,10,10],[10,10,10],[10,10,10]]
+        t = [[12,12,12],[12,12,12],[12,12,12]]
         for i in range(3):
             self.assertEqual(v[i],t[i])
 
         self.assertTrue(b.guess(0,0))
         v = b.get_view()
-        t = [[0,0,0],[0,1,1],[0,1,10]]
+        t = [[0,0,0],[0,1,1],[0,1,12]]
         for i in range(3):
             self.assertEqual(v[i],t[i])
 
@@ -37,11 +37,11 @@ class TestBoardClass(unittest.TestCase):
         """ toimiiko voittotilanteen tunnistus """
         b = Board(2)
         b.tiles=[[1,9],[9,9]]
-        b.masked=[[10,10],[10,10]]
+        b.masked=[[12,12],[12,12]]
         self.assertFalse(b.is_winning())
-        b.masked=[[0,10],[10,10]]
+        b.masked=[[0,12],[12,12]]
         self.assertTrue(b.is_winning())
-        b.masked=[[0,0],[10,10]]
+        b.masked=[[0,0],[12,12]]
         self.assertFalse(b.is_winning())
 
     def test_error_conditions_in_guess(self):
@@ -56,23 +56,23 @@ class TestBoardClass(unittest.TestCase):
         """ maski annetaan oikein """
         b = Board(2)
         b.tiles=[[1,9],[9,9]]
-        self.assertEqual(b.get_mask(0,0), 10)
+        self.assertEqual(b.get_mask(0,0), 12)
 
     def test_flag(self):
         """ ruudun liputus toimii """
         b = Board(2)
         b.tiles=[[1,9],[9,9]]
-        self.assertEqual(b.get_mask(0,0), 10)
-        self.assertTrue(b.flag(0,0))
-        self.assertEqual(b.get_mask(0,0), 11)
-        self.assertTrue(b.flag(0,0))
         self.assertEqual(b.get_mask(0,0), 12)
         self.assertTrue(b.flag(0,0))
         self.assertEqual(b.get_mask(0,0), 13)
         self.assertTrue(b.flag(0,0))
         self.assertEqual(b.get_mask(0,0), 10)
-        self.assertTrue(b.flag(0,0,13))
-        self.assertEqual(b.get_mask(0,0), 13)
+        self.assertTrue(b.flag(0,0))
+        self.assertEqual(b.get_mask(0,0), 11)
+        self.assertTrue(b.flag(0,0))
+        self.assertEqual(b.get_mask(0,0), 12)
+        self.assertTrue(b.flag(0,0,10))
+        self.assertEqual(b.get_mask(0,0), 10)
 
     def test_flag_error_conditions(self):
         """ liputus ei onnistu jos avattu, alueen ulkopuolella, outo arvo """
