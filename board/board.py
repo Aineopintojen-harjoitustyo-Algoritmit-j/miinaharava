@@ -14,59 +14,59 @@ class Board():
         #self.size = size
         width = 2 if width < 2 else width
         width = 50 if width > 50 else width
-        self.width = width
 
         height = 2 if height < 2 else height
         height = 50 if height > 50 else height
-        self.height = height
 
         # Pommeja pitää olla vähintään yksi, kuten tyhjiäkin
         #bombs = size*size*size//100 if bombs < 1 else bombs
         bombs = width*height-1 if bombs>=width*height else bombs
         bombs = 1 if bombs == 0 else bombs
-        self.bombs = bombs
 
-        self.tiles = []
-        self.masked = []
-        self.initialize_tiles()
-        self.randomize_bombs( bombs )
-        self.calculate_neighbours()
+        self.__width = width
+        self.__height = height
+        self.__bombs = bombs
+        self.__tiles = None
+        self.__masked = None
+        self.__initialize_tiles()
+        self.__randomize_bombs()
+        self.__calculate_neighbours()
 
 
-    def initialize_tiles(self):
+    def __initialize_tiles(self):
         """ alustaa pelilaudan matriisit """
-        w, h = self.width, self.height
-        self.tiles = [[0 for _ in range(h)] for _ in range(w)]
-        self.masked = [[12 for _ in range(h)] for _ in range(w)]
+        w, h = self.__width, self.__height
+        self.__tiles = [[0 for _ in range(h)] for _ in range(w)]
+        self.__masked = [[12 for _ in range(h)] for _ in range(w)]
 
 
-    def randomize_bombs(self, bomb_count):
+    def __randomize_bombs(self):
         """ arpoo pelilaudalle pommit """
-        for _ in range(bomb_count):
+        for _ in range(self.__bombs):
             while True:
-                x, y = randrange(0,self.width), randrange(0,self.height)
-                if self.tiles[x][y] != 0:
+                x, y = randrange(0,self.__width), randrange(0,self.__height)
+                if self.__tiles[x][y] != 0:
                     continue
-                self.tiles[x][y]=9
+                self.__tiles[x][y]=9
                 break
 
 
-    def calculate_neighbours(self):
+    def __calculate_neighbours(self):
         """ laskee naapurissa olevien pommien määrät valmiiksi laudalle """
-        for y in range(self.height):
-            for x in range(self.width):
-                if self.tiles[x][y] == 9:
+        for y in range(self.__height):
+            for x in range(self.__width):
+                if self.__tiles[x][y] == 9:
                     continue
                 neighbouring_bombs = 0
                 for nx, ny in self.get_neighbours_coords(x,y):
-                    if self.tiles[nx][ny] == 9:
+                    if self.__tiles[nx][ny] == 9:
                         neighbouring_bombs += 1
-                self.tiles[x][y] = neighbouring_bombs
+                self.__tiles[x][y] = neighbouring_bombs
 
 
     def invalid_coordinates(self, x, y):
         """ onko koordinaatit pelilaudan ulkopuolella """
-        return x < 0 or x >= self.width or y < 0 or y >= self.height
+        return x < 0 or x >= self.__width or y < 0 or y >= self.__height
 
 
     def get_neighbours_coords(self, x, y, include_home = False):
@@ -89,23 +89,23 @@ class Board():
 
     def get_view(self):
         """ antaa matriisin nykyisestä pelinäkymästä """
-        view = deepcopy(self.masked)
-        for y in range(self.height):
-            for x in range(self.width):
+        view = deepcopy(self.__masked)
+        for y in range(self.__height):
+            for x in range(self.__width):
                 if not view[x][y]:
-                    view[x][y]=self.tiles[x][y]
+                    view[x][y]=self.__tiles[x][y]
         return view
 
 
     def is_winning(self):
         """ tarkistaa onko peli voitettu """
-        for y in range(self.height):
-            for x in range(self.width):
-                if self.tiles[x][y] == 9:
-                    if not self.masked[x][y]:
+        for y in range(self.__height):
+            for x in range(self.__width):
+                if self.__tiles[x][y] == 9:
+                    if not self.__masked[x][y]:
                         return False
                 else:
-                    if self.masked[x][y]:
+                    if self.__masked[x][y]:
                         return False
         return True
 
@@ -116,7 +116,7 @@ class Board():
             area = {(x,y)}
         to_test = []
         for nx, ny in self.get_neighbours_coords(x, y):
-            if self.tiles[nx][ny] == 0 and (nx,ny) not in area:
+            if self.__tiles[nx][ny] == 0 and (nx,ny) not in area:
                 to_test.append((nx, ny))
                 area.add((nx, ny))
         for tx, ty in to_test:
@@ -126,7 +126,7 @@ class Board():
 
     def get_mask(self, x, y):
         """ onko ruutu vielä piilossa """
-        return self.masked[x][y]
+        return self.__masked[x][y]
 
 
     def flag(self, x, y, flag=-1):
@@ -135,19 +135,19 @@ class Board():
             print("Koordinaatit on pelilaudan ulkopuolella", file=stderr)
             return False
 
-        if self.masked[x][y] not in range(10,14):
+        if self.__masked[x][y] not in range(10,14):
             print("Ruudulla odottamaton lippu tai se on avattu", file=stderr)
             return False
 
         if flag == -1:
-            self.masked[x][y] += 1 if self.masked[x][y] < 13 else -3
+            self.__masked[x][y] += 1 if self.__masked[x][y] < 13 else -3
             return True
 
         if flag not in range(10,14):
             print("Lippua jota asetat ei ole olemassa", file=stderr)
             return False
 
-        self.masked[x][y]=flag
+        self.__masked[x][y]=flag
         return True
 
 
@@ -157,31 +157,31 @@ class Board():
             print("Koordinaatit on pelilaudan ulkopuolella", file=stderr)
             return False
 
-        if self.masked[x][y] == 0:
+        if self.__masked[x][y] == 0:
             print("Ruutu on jo avattu", file=stderr)
             return False
 
-        self.masked[x][y] = 0
+        self.__masked[x][y] = 0
 
-        if self.tiles[x][y] == 9:
+        if self.__tiles[x][y] == 9:
             return False
 
-        if self.tiles[x][y] == 0:
+        if self.__tiles[x][y] == 0:
             for cx, cy in self.collect_area( x, y ):
                 for nx, ny in self.get_neighbours_coords(cx, cy, True):
-                    self.masked[nx][ny] = 0
+                    self.__masked[nx][ny] = 0
 
         return True
 
     def reveal(self):
         """ näytä koko lauta """
-        w, h = self.width, self.height
-        self.masked = [[0 for _ in range(h)] for _ in range(w)]
+        w, h = self.__width, self.__height
+        self.__masked = [[0 for _ in range(h)] for _ in range(w)]
 
     def get_width(self):
         """ palauttaa laudan leveyden """
-        return self.width
+        return self.__width
 
     def get_height(self):
         """ palauttaa laudan korkeuden """
-        return self.height
+        return self.__height
