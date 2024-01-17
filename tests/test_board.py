@@ -1,4 +1,5 @@
 """test_board.py - Testit pelilaudalle"""
+# pylint: disable = protected-access
 
 import unittest
 from board.board import Board
