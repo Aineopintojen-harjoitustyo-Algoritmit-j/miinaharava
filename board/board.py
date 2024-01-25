@@ -2,30 +2,44 @@
 from random import randrange
 from sys import stderr
 from copy import deepcopy
+from enum import Enum
+
+
+class Level(Enum):
+    """ vaikeustasot """
+    BEGINNER = 0
+    INTERMEDIATE = 1
+    EXPERT = 2
+
+
+LevelSpecs = {
+    Level.BEGINNER:	(  9,  9, 10 ),
+    Level.INTERMEDIATE:	( 15, 15, 40 ),
+    Level.EXPERT:	( 30, 16, 99 )
+}
+
 
 class Board():
     """	Board - Luokka joka pitää huolen pelilaudasta ja siihen kohdistuvista
                 siirroista.
     """
-    def __init__(self, width = 9, height = 9, bombs = 10):
-        # Lauta pitää olla vähintään 2x2, jotta on jotain pelattavaa
-        #size = 2 if size < 2 else size
-        #size = 50 if size > 50 else size
-        #self.size = size
-        width = 2 if width < 2 else width
-        width = 50 if width > 50 else width
+    def __init__(self, **opts):
 
-        height = 2 if height < 2 else height
-        height = 50 if height > 50 else height
+        self.__level = opts["level"] if "level" in opts else Level.BEGINNER
+        self.__width, self.__height, self.__bombs = LevelSpecs[self.__level]
 
-        # Pommeja pitää olla vähintään yksi, kuten tyhjiäkin
-        #bombs = size*size*size//100 if bombs < 1 else bombs
-        bombs = width*height-1 if bombs>=width*height else bombs
-        bombs = 1 if bombs == 0 else bombs
+        self.__width = opts["width"] if "width" in opts else self.__width
+        self.__height = opts["height"] if "height" in opts else self.__height
+        self.__bombs = opts["bombs"] if "bombs" in opts else self.__bombs
 
-        self.__width = width
-        self.__height = height
-        self.__bombs = bombs
+        if self.__width not in range(2,51):
+            self.__width = LevelSpecs[self.__level][0]
+        if self.__height not in range(2,51):
+            self.__height = LevelSpecs[self.__level][0]
+
+        if self.__bombs not in range(1,self.__width*self.__height):
+            self.__bombs = self.__width
+
         self.__tiles = None
         self.__masked = None
         self.__initialize_tiles()
@@ -185,3 +199,12 @@ class Board():
     def get_height(self):
         """ palauttaa laudan korkeuden """
         return self.__height
+
+    def get_bombs(self):
+        """ palauttaa pommien määrän """
+        return self.__bombs
+
+    def get_level(self):
+        """ palauttaa vaikesutason """
+        return self.__level if (self.__width, self.__height, self.__bombs) \
+                == LevelSpecs[self.__level] else None

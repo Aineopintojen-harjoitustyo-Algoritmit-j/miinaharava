@@ -1,5 +1,5 @@
 """ app.py - pääohjelma """
-from board.board import Board
+from board.board import Board, Level
 from tui.tui import Tui
 from game.game import Game
 #from bots.idiot import IdiotBot
@@ -9,7 +9,7 @@ from bots.bad import BadBot
 class App:
     """ App - Luokka pääohjelmalle"""
     def __init__(self):
-        self.board = Board(30,16,99)
+        self.board = Board(level=Level.BEGINNER)
         self.bot = BadBot()
         self.ui = Tui(self.bot)
         self.game = Game(self.board,self.ui)
