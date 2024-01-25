@@ -1,6 +1,7 @@
 """ bots/idiot.py - se ensimmäinen botti joka tekee kaiken väärin """
-from bots.bot import Bot
-from tui.static import Action
+from tui import Action
+from .bot import Bot
+
 class IdiotBot(Bot):
     """ IdiotBot - merkistsee kaikki turvallisiksi avata """
     # pylint: disable = too-few-public-methods

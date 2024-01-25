@@ -2,21 +2,8 @@
 from random import randrange
 from sys import stderr
 from copy import deepcopy
-from enum import Enum
 
-
-class Level(Enum):
-    """ vaikeustasot """
-    BEGINNER = 0
-    INTERMEDIATE = 1
-    EXPERT = 2
-
-
-LevelSpecs = {
-    Level.BEGINNER:	(  9,  9, 10 ),
-    Level.INTERMEDIATE:	( 15, 15, 40 ),
-    Level.EXPERT:	( 30, 16, 99 )
-}
+from .static import Level, Tile, LevelSpecs
 
 
 class Board():
@@ -50,8 +37,8 @@ class Board():
     def __initialize_tiles(self):
         """ alustaa pelilaudan matriisit """
         w, h = self.__width, self.__height
-        self.__tiles = [[0 for _ in range(h)] for _ in range(w)]
-        self.__masked = [[12 for _ in range(h)] for _ in range(w)]
+        self.__tiles = [[Tile.BLANK for _ in range(h)] for _ in range(w)]
+        self.__masked = [[Tile.UNOPENED for _ in range(h)] for _ in range(w)]
 
 
     def __randomize_bombs(self):
@@ -59,9 +46,9 @@ class Board():
         for _ in range(self.__bombs):
             while True:
                 x, y = randrange(0,self.__width), randrange(0,self.__height)
-                if self.__tiles[x][y] != 0:
+                if self.__tiles[x][y] != Tile.BLANK:
                     continue
-                self.__tiles[x][y]=9
+                self.__tiles[x][y] = Tile.BOMB
                 break
 
 
@@ -69,11 +56,11 @@ class Board():
         """ laskee naapurissa olevien pommien määrät valmiiksi laudalle """
         for y in range(self.__height):
             for x in range(self.__width):
-                if self.__tiles[x][y] == 9:
+                if self.__tiles[x][y] == Tile.BOMB:
                     continue
                 neighbouring_bombs = 0
                 for nx, ny in self.get_neighbours_coords(x,y):
-                    if self.__tiles[nx][ny] == 9:
+                    if self.__tiles[nx][ny] == Tile.BOMB:
                         neighbouring_bombs += 1
                 self.__tiles[x][y] = neighbouring_bombs
 
@@ -115,7 +102,7 @@ class Board():
         """ tarkistaa onko peli voitettu """
         for y in range(self.__height):
             for x in range(self.__width):
-                if self.__tiles[x][y] == 9:
+                if self.__tiles[x][y] == Tile.BOMB:
                     if not self.__masked[x][y]:
                         return False
                 else:
@@ -130,7 +117,7 @@ class Board():
             area = {(x,y)}
         to_test = []
         for nx, ny in self.get_neighbours_coords(x, y):
-            if self.__tiles[nx][ny] == 0 and (nx,ny) not in area:
+            if self.__tiles[nx][ny] == Tile.BLANK and (nx,ny) not in area:
                 to_test.append((nx, ny))
                 area.add((nx, ny))
         for tx, ty in to_test:
@@ -171,16 +158,16 @@ class Board():
             print("Koordinaatit on pelilaudan ulkopuolella", file=stderr)
             return False
 
-        if self.__masked[x][y] == 0:
+        if not self.__masked[x][y]:
             print("Ruutu on jo avattu", file=stderr)
             return False
 
         self.__masked[x][y] = 0
 
-        if self.__tiles[x][y] == 9:
+        if self.__tiles[x][y] == Tile.BOMB:
             return False
 
-        if self.__tiles[x][y] == 0:
+        if self.__tiles[x][y] == Tile.BLANK:
             for cx, cy in self.collect_area( x, y ):
                 for nx, ny in self.get_neighbours_coords(cx, cy, True):
                     self.__masked[nx][ny] = 0

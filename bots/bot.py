@@ -1,5 +1,5 @@
 """ bots/bot.py - bottien kantaisä """
-from tui.static import Action
+from tui import Action
 
 class Bot():
     """ Bot - perusluokka perittäväksi """

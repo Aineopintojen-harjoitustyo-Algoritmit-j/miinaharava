@@ -1,5 +1,5 @@
 """ game/game.py - pelin etenemiseen liittyvä ohjaus """
-from tui.tui import Action
+from tui import Action
 
 class Game:
     """ Game - peli """

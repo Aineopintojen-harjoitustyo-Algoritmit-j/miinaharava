@@ -1,6 +1,7 @@
 """ tui/static.py - Staattiset määritykset tui:ssa tarvittaville jutuille. """
 from enum import Enum
 from dataclasses import dataclass
+from board import Tile
 
 class Action(Enum):
     """ tominnot, joita voidaan saada palautusrvona """
@@ -57,7 +58,7 @@ class TileType:
 
 
 TileTypes = {
-    0:	TileType( "[ ]", [(0x7,0), (0x7,0), (0x7,0)] ),
+    Tile.BLANK:		TileType( "[ ]", [(0x7,0), (0x7,0), (0x7,0)] ),
     1:	TileType( "[1]", [(0xA,0), (0xA,0), (0xA,0)] ),
     2:	TileType( "[2]", [(0xB,0), (0xB,0), (0xB,0)] ),
     3:	TileType( "[3]", [(0xD,0), (0xD,0), (0xD,0)] ),

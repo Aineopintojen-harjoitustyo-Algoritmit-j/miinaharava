@@ -1,9 +1,8 @@
 """ app.py - pääohjelma """
-from board.board import Board, Level
-from tui.tui import Tui
-from game.game import Game
-#from bots.idiot import IdiotBot
-from bots.bad import BadBot
+from board import Board, Level
+from tui import Tui
+from game import Game
+from bots import BadBot
 
 # pylint: disable = too-few-public-methods
 class App:

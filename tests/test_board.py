@@ -2,7 +2,7 @@
 # pylint: disable = protected-access
 
 import unittest
-from board.board import Board, Level, LevelSpecs
+from board import Board, Level, LevelSpecs
 
 class TestBoardClass(unittest.TestCase):
     """ pelilauden testit"""

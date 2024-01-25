@@ -2,8 +2,8 @@
 # pylint: disable = multiple-imports
 import termios, fcntl, sys, os
 from time import sleep
-from tui.static import Action, ActionKeys, TileTypes
-from tui.ansi import Ansi
+from .static import Action, ActionKeys, TileTypes
+from .ansi import Ansi
 
 
 class Tui():
