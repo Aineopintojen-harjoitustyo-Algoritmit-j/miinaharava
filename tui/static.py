@@ -59,17 +59,17 @@ class TileType:
 
 TileTypes = {
     Tile.BLANK:		TileType( "[ ]", [(0x7,0), (0x7,0), (0x7,0)] ),
-    1:	TileType( "[1]", [(0xA,0), (0xA,0), (0xA,0)] ),
-    2:	TileType( "[2]", [(0xB,0), (0xB,0), (0xB,0)] ),
-    3:	TileType( "[3]", [(0xD,0), (0xD,0), (0xD,0)] ),
-    4:	TileType( "[4]", [(0x9,0), (0x9,0), (0x9,0)] ),
-    5:	TileType( "[5]", [(0x9,0), (0x9,0), (0x9,0)] ),
-    6:	TileType( "[6]", [(0x9,0), (0x9,0), (0x9,0)] ),
-    7:	TileType( "[7]", [(0x9,0), (0x9,0), (0x9,0)] ),
-    8:	TileType( "[8]", [(0x9,0), (0x9,0), (0x9,0)] ),
-    9:	TileType( "[@]", [(0xF,1), (0xF,1), (0xF,1)] ),
-    10:	TileType( "[×]", [(0x8,7), (0x1,7), (0x8,7)] ),
-    11:	TileType( "[•]", [(0x8,7), (0x2,7), (0x8,7)] ),
-    12:	TileType( "[#]", [(0x8,7), (0x8,7), (0x8,7)] ),
-    13:	TileType( "[?]", [(0x8,7), (0x0,7), (0x8,7)] )
+    Tile.ONE:		TileType( "[1]", [(0xA,0), (0xA,0), (0xA,0)] ),
+    Tile.TWO:		TileType( "[2]", [(0xB,0), (0xB,0), (0xB,0)] ),
+    Tile.THREE:		TileType( "[3]", [(0xD,0), (0xD,0), (0xD,0)] ),
+    Tile.FOUR:		TileType( "[4]", [(0x9,0), (0x9,0), (0x9,0)] ),
+    Tile.FIVE:		TileType( "[5]", [(0x9,0), (0x9,0), (0x9,0)] ),
+    Tile.SIX:		TileType( "[6]", [(0x9,0), (0x9,0), (0x9,0)] ),
+    Tile.SEVEN:		TileType( "[7]", [(0x9,0), (0x9,0), (0x9,0)] ),
+    Tile.EIGHT:		TileType( "[8]", [(0x9,0), (0x9,0), (0x9,0)] ),
+    Tile.BOMB:		TileType( "[@]", [(0xF,1), (0xF,1), (0xF,1)] ),
+    Tile.FLAG_BOMB:	TileType( "[×]", [(0x8,7), (0x1,7), (0x8,7)] ),
+    Tile.FLAG_FREE:	TileType( "[•]", [(0x8,7), (0x2,7), (0x8,7)] ),
+    Tile.UNOPENED:	TileType( "[#]", [(0x8,7), (0x8,7), (0x8,7)] ),
+    Tile.FLAG_UNKNOWN:	TileType( "[?]", [(0x8,7), (0x0,7), (0x8,7)] )
 }
