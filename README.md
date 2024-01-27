@@ -7,8 +7,15 @@ Miinaharava ratkaisijalla
 - [määrittelydokumentti](doc/m%C3%A4%C3%A4rittelydokumentti.pdf)
   
 ## Ohjeet:
+
+### Asenna
 `git clone https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava`
 
+### Aja
 `python3 miinaharava`
 
+### Käyttöohjeet
 `python3 miinaharava -h`
+
+### Automaattipelin suoritusesimerkki
+`python3 miinaharava -i -a -u`

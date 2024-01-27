@@ -3,7 +3,8 @@ from tui import Action
 
 class Bot():
     """ Bot - perusluokka perittäväksi """
-    def __init__(self):
+    def __init__(self, **opts):
+        self.uncertain = opts['uncertain'] if 'uncertain' in opts else False
         self.hints = 0
 
     def neighbours(self,dx,dy,x,y):

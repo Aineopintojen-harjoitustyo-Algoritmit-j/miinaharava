@@ -1,4 +1,5 @@
 """ bots/bad.py - botti joka ehkä osaa merkata jonkun asian """
+from random import sample
 from tui import Action
 from .bot import Bot
 
@@ -37,6 +38,16 @@ class BadBot(Bot):
                     tiles.append( (x,y) )
         return tiles
 
+    def get_unopened_tiles(self, matrix):
+        """ get interesting tiles on the border of cleared and masked area """
+        tiles = []
+        w = len(matrix)
+        h = len(matrix[0])
+        for y in range(h):
+            for x in range(w):
+                if matrix[x][y] == 12:
+                    tiles.append( (x,y) )
+        return tiles
 
     def hint(self, matrix, cursor_x, cursor_y):
         """ merkitsee jonkin ruudun """
@@ -56,4 +67,7 @@ class BadBot(Bot):
                 if matrix[x][y]-bombs==unopened:
                     bomb = ncoords[ntiles.index(12)]
                     return(Action.BOMB, bomb[0], bomb[1])
+        if self.uncertain:
+            x, y = sample(self.get_unopened_tiles(matrix),1)[0]
+            return (Action.OPEN, x, y)
         return (Action.NOOP, cursor_x, cursor_y)

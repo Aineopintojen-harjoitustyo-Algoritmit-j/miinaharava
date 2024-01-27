@@ -32,9 +32,6 @@ parser.add_argument(
     action='store_true'
 )
 
-
-
-
 args = parser.parse_args()
 
 app = App(args)
