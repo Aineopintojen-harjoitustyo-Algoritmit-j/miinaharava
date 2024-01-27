@@ -27,3 +27,4 @@ class App:
         """ käynnistää pelin """
         while self.game.next():
             pass
+        return self.board.is_winning()

@@ -1,4 +1,5 @@
 """ __main__.py - Tästä suoritus alkaa """
+import sys
 from argparse import ArgumentParser
 from app import App
 
@@ -35,4 +36,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 app = App(args)
-app.run()
+is_win = app.run()
+del app
+
+sys.exit(not is_win)	# Exit koodeissa 0 on onnistunut suoritus

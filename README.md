@@ -11,11 +11,11 @@ Miinaharava ratkaisijalla
 ### Asenna
 `git clone https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava`
 
-### Aja
+### Pelaa
 `python3 miinaharava`
 
 ### Käyttöohjeet
 `python3 miinaharava -h`
 
-### Automaattipelin suoritusesimerkki
-`python3 miinaharava -i -a -u`
+### Skripti joka pelaa automaattisesti 100 peliä aloittelijan vaikeustasolla
+`bash miinaharava/batch/100-run-beginner-bad.sh`

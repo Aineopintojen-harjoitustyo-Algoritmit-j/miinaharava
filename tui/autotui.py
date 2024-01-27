@@ -1,6 +1,7 @@
 """ autotui - pelaa botin antamat vinkit jonka jälkeen käyttäjän """
 from .tui import Tui
 from .static import Action
+from .ansi import Ansi
 
 class AutoTui(Tui):
     """ Tui - Luokka joka tekee botin vinkit ensin """
@@ -15,3 +16,12 @@ class AutoTui(Tui):
                 return action, x, y
 
         return super().matrix_selector(matrix, x, y)
+
+    def show_board_with_text(self, matrix, x, y, text):
+        """ näyttää laudan, tekstin alla (ei odota nappia) """
+        self.draw_matrix(matrix, x, y)
+        print(text)
+        Ansi.cup(1)
+
+    def game_end(self, matrix):
+        """ pelin lopetus """
