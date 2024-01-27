@@ -1,6 +1,6 @@
 #!/bin/bash
 OPTIONS="-b -a -u"
-let COUNT=100
+let COUNT=1000
 let WINS=0
 for ((i=0;i<COUNT;i++)); do
 	python3 miinaharava $OPTIONS && let WINS++;

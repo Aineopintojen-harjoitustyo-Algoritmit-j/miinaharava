@@ -5,6 +5,10 @@ Miinaharava ratkaisijalla
 
 ## Dokumentit:
 - [määrittelydokumentti](doc/m%C3%A4%C3%A4rittelydokumentti.pdf)
+
+### Viikkoraportit
+- [viikko 1](doc/viikkoraportti1.pdf)
+- [viikko 2](doc/viikkoraportti2.pdf)
   
 ## Ohjeet:
 
