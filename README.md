@@ -10,3 +10,5 @@ Miinaharava ratkaisijalla
 `git clone https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava`
 
 `python3 miinaharava`
+
+`python3 miinaharava -h`
