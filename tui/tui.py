@@ -1,136 +1,89 @@
-""" tui/tui.py - teksikäyttöliittymä """
+""" tui/tui.py - runko käyttöliittymälle """
 # pylint: disable = multiple-imports
-import termios, fcntl, sys, os
-from time import sleep
-from .static import Action, ActionKeys, TileTypes
-from .ansi import Ansi
+from .static import Action
+from .kbd import Kbd, NoKbd
+from .ansi_draw import AnsiDraw, SuppressDraw
 
 
 class Tui():
     """ Tui - Luokka käyttäjän interaktiota varten """
-    def __init__(self, bot = None):
-        # Vaatii hieman terminaaliasetusten muokkaamista jotta yksittäiset
-        # napin painallukset voidaan lukea
-        # https://stackoverflow.com/questions/983354/how-do-i-wait-for-a-pressed-key
-        fd = sys.stdin.fileno()
-        self.oldterm = termios.tcgetattr(fd)
+    # pylint: disable = unused-argument
+    def __init__(self, **opts):
+        self.bot = opts['bot'] if 'bot' in opts else None
+        self.autoplay = opts['autoplay'] if 'autoplay' in opts else False
+        self.interact = opts['interact'] if 'interact' in opts else True
+        self.suppress = opts['suppress'] if 'suppress' in opts else False
+        self.height = opts['height'] if 'height' in opts else 15
 
-        newattr = termios.tcgetattr(fd)
-        newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
-        termios.tcsetattr(fd, termios.TCSANOW, newattr)
+        # jos ei oo bottia pitää olla interaktiivinen
+        if self.bot is None:
+            self.autoplay = False
+            self.interact = True
+            self.suppress = False
 
-        self.oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
-        fcntl.fcntl(fd, fcntl.F_SETFL, self.oldflags | os.O_NONBLOCK)
+        # jos ei mitään näytetä ei voi olla interaktiivinen
+        self.interact = False if self.suppress else self.interact
 
-        self.bot = bot
+        # automaattipeli pitää olla päällä jos ei interaktiivinen
+        self.autoplay = self.autoplay if self.interact else True
 
+        if self.interact:
+            self.kbd = Kbd()
+        else:
+            self.kbd = NoKbd()
 
-    def __del__(self):
-        # palautetaan terminaali takaisin alkupetäiseen uskoon
-        fd = sys.stdin.fileno()
-        termios.tcsetattr(fd, termios.TCSAFLUSH, self.oldterm)
-        fcntl.fcntl(fd, fcntl.F_SETFL, self.oldflags)
-        print()
-
-
-    def draw_tile(self, tile, hilighted):
-        """ "piirtää" yhden ruudun """
-        for ch, colors in zip(TileTypes[tile].text, TileTypes[tile].colors):
-            color, bg = colors
-            Ansi.color(Ansi.BLACK if hilighted else color)
-            Ansi.bg(Ansi.CYAN if hilighted else bg)
-            print(end=ch)
-            Ansi.reset()
-
-
-    def draw_matrix(self, matrix, hx, hy):
-        """ "piirtää" ruudukon """
-        Ansi.cup(len(matrix[0]))
-        # pylint: disable=consider-using-enumerate
-        for y in range(len(matrix[0])):
-            for x in range(len(matrix)):
-                hilight = matrix[x][y] != 9 and x == hx and y == hy
-                self.draw_tile(matrix[x][y], hilight)
-            print()
-
-
-    def read_action(self):
-        """ lukee näppäimistölä käyttäjän toiminnon """
-        while True:
-            # Ehkä riittää jos näppäimiä luetaan 50x sekunnissa
-            sleep(0.02)
-            try:
-                keycode = sys.stdin.read(16)
-            except KeyboardInterrupt:
-                return Action.QUIT
-            if keycode:
-                for key, action in ActionKeys.items():
-                    if keycode.startswith(key):
-                        return action
-
+        if self.suppress:
+            self.draw = SuppressDraw()
+        else:
+            self.draw = AnsiDraw(height=self.height)
 
     def matrix_selector(self, matrix, x, y):
-        """ piirtää ruudukon ja antaa käyttäjän valita nuolinäppäimillä """
-        self.draw_matrix(matrix, x, y)
+        """ valinta matriisita """
+
+        # automaattipeli avaa botin vinkit heti
+        if self.autoplay:
+            action, x, y = self.bot.hint(matrix, x, y)
+            if action != Action.NOOP:
+                self.draw.matrix(matrix, -1, -1)
+                return Action.OPEN if action==Action.SAFE else action, x, y
+
+
+        # ilman näppiskäsittelijää voidaan lopettaa
+        if not self.interact:
+            return Action.QUIT, 0, 0
+
+        w, h = len(matrix), len(matrix[0])
         while True:
-            action = self.read_action()
+            self.draw.matrix(matrix, x, y)
+            action, x, y = self.kbd.read_matrix_action(w, h, x, y)
             match action:
                 case Action.QUIT:
                     return (action, x, y)
                 case Action.OPEN | Action.FLAG | Action.BOMB | Action.SAFE:
                     if matrix[x][y] >= 10:
                         return (action, x, y)
-                case Action.UP:
-                    y = y-1 if y > 0 else 0
-                case Action.LEFT:
-                    x = x-1 if x > 0 else 0
-                case Action.DOWN:
-                    y = y+1 if y < len(matrix[0])-1 else y
-                case Action.RIGHT:
-                    x = x+1 if x < len(matrix)-1 else x
-                case Action.TOP:
-                    y = 0
-                case Action.BOTTOM:
-                    y = len(matrix[0])-1
-                case Action.BEGIN:
-                    x = 0
-                case Action.END:
-                    x = len(matrix)-1
                 case Action.HINT:
                     if self.bot is not None:
                         return self.bot.hint(matrix, x, y)
-            self.draw_matrix(matrix, x, y)
-
-
-    def show_board_with_text(self, matrix, x, y, text):
-        """ näyttää laudan, tekstin alla ja jää odottelemaan nappia """
-        self.draw_matrix(matrix, x, y)
-        print(text)
-        Ansi.cup(1)
-        self.read_action()
-
-
-    def game_begin(self, width, height):
-        """ ruudun alustus ja lähtökoordinaatien määritys """
-        print(end="\n"*(height+1))
-        Ansi.cup(1)
-        return width//2, height//2
-
 
     def game_over(self, matrix, x, y):
-        """ näyttää pelin lopputilanteen ja odottaa nappia """
-        self.show_board_with_text(matrix, x, y,
-                "KUOLEMA! ...näppäimellä eteenpäin...")
-
+        """ tehtävät kun kuolee """
+        self.draw.matrix(matrix, x, y)
+        self.draw.status_line(
+            "K  " if self.suppress else "Peli ohitse! Kuolit!"
+        )
+        self.kbd.read_action()
 
     def game_win(self, matrix, x, y):
-        """ näyttäää pelin lopputilanteen ja odottaa nappia """
-        self.show_board_with_text(matrix, x, y,
-                "VOITTO! ...näppäimellä eteenpäin...")
-
+        """ tehtävät kun voittaa """
+        self.draw.matrix(matrix, x, y)
+        self.draw.status_line(
+            "V  " if self.suppress else "Peli ohitse! Voitit!"
+        )
+        self.kbd.read_action()
 
     def game_end(self, matrix):
-        """ pelin lopetus """
-        self.show_board_with_text(matrix, -1, -1,
-                "PELI OHI! ...näppäimellä eteenpäin...")
-        print()
+        """ tehtävät ihan pelin lopuksi """
+        if self.interact:
+            self.draw.matrix(matrix, -1, -1)
+            self.draw.status_line("Kiitos!             ")

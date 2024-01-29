@@ -9,6 +9,7 @@ Miinaharava ratkaisijalla
 ### Viikkoraportit
 - [viikko 1](doc/viikkoraportti1.pdf)
 - [viikko 2](doc/viikkoraportti2.pdf)
+- [viikko 3](doc/viikkoraportti3.pdf)
   
 ## Ohjeet:
 
@@ -21,5 +22,5 @@ Miinaharava ratkaisijalla
 ### Käyttöohjeet
 `python3 miinaharava -h`
 
-### Skripti joka pelaa automaattisesti 100 peliä aloittelijan vaikeustasolla
-`bash miinaharava/batch/100-run-beginner-bad.sh`
+### Automaattipelaa 10 peliä
+`python3 miinaharava -w 10`

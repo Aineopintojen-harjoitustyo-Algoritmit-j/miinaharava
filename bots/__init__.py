@@ -1,4 +1,4 @@
 """ bots - tämä alimoduli tarjoaa tekoälyn """
 
-from .bot import Bot
-from .bad import BadBot
+from .simple import SimpleBot
+from .dssp import DSSPBot
