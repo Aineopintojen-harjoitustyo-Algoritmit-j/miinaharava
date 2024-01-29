@@ -123,6 +123,17 @@ class Bot():
                         tiles.add((x,y))
         return tiles
 
+    def get_border_tiles(self):
+        """ palauttaa palauttaa numerolaatat joiden vieressä avaamaton """
+        tiles = set()
+        for x in range(self.w):
+            for y in range(self.h):
+                if self.number_tile((x,y)):
+                    n = self.get_neighbours((x,y))
+                    if self.count_unknowns(n):
+                        tiles.add((x,y))
+        return tiles
+
     def get_unknown_tiles(self):
         """ palauttaa kaikki tuntemattomat laatat """
         tiles = set()

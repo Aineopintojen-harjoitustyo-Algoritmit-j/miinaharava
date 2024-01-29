@@ -54,22 +54,20 @@ class DSSPBot(SimpleBot):
         return self.saved_hints()
 
     def lucky_guess(self):
-        heatmap = dict.fromkeys(self.get_unknown_tiles(), 0)
-        tiles = self.get_interesting_tiles()
+        heatmap = dict.fromkeys(self.get_unknown_tiles(), float(0))
+        tiles = self.get_border_tiles()
         for tile in tiles:
             n = self.get_neighbours(tile)
             c = self.get_value(tile) - self.remove_bomb_tiles(n)
             self.remove_number_tiles(n)
-            for tile in n:
-                heatmap[tile] = max( heatmap[tile], c/len(n) )
+            for ntile in n:
+                heatmap[ntile] += c/len(n)
 
-        for tile, value in heatmap.items():
-            if value>0:
-                continue
+        for tile in heatmap:
             if tile[0] in range(1,self.w-1):
-                heatmap[tile]+=0.05
+                heatmap[tile]+=0.005
             if tile[1] in range(1,self.h-1):
-                heatmap[tile]+=0.05
+                heatmap[tile]+=0.005
 
         best = min((x for _, x in heatmap.items()))
         best_tiles = [x for x,y in heatmap.items() if y == best]
