@@ -23,4 +23,4 @@ Miinaharava ratkaisijalla
 `python3 miinaharava -h`
 
 ### Automaattipelaa 10 peliä
-`python3 miinaharava -w 10`
+`python3 miinaharava -c 10`

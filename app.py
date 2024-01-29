@@ -11,9 +11,8 @@ class App:
         level = Level.BEGINNER
         auto, uncertain, quiet = False, False, False
         if args:
-            level = Level.EXPERT if args.expert else level
             level = Level.INTERMEDIATE if args.intermediate else level
-            level = Level.BEGINNER if args.beginner else level
+            level = Level.EXPERT if args.expert else level
             width, height, bombs = LevelSpecs[level]
             auto = args.auto
             auto, uncertain = (True, True) if args.uncertain else (auto, False)

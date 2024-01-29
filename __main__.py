@@ -8,13 +8,8 @@ parser = ArgumentParser(
     description='Klassisen miinaharavapelin terminaali toteutus.',
 )
 parser.add_argument(
-    '-b', '--beginner',
-    help='Asettaa aloittelijan vaikeustason (oletus)',
-    action='store_true',
-)
-parser.add_argument(
     '-i', '--intermediate',
-    help='Asettaa keskivaikean vaikeustaso',
+    help='Asettaa keskivaikean vaikeustaso (oletus on aloittelija)',
     action='store_true'
 )
 parser.add_argument(
@@ -43,15 +38,33 @@ parser.add_argument(
     action='store_true'
 )
 parser.add_argument(
-    '-w',
+    '-c',
     metavar='COUNT',
     type=int,
-    help='Suorittaa ohelmaa COUNT kertaa ja tulostaa voitto-osuuden',
+    help='Suorittaa ohelmaa COUNT kertaa ja tulostaa voitto-osuuden.',
+)
+parser.add_argument(
+    '-w',
+    metavar='WIDTH',
+    type=int,
+    help='Mukautaa pelilaudan leveydelle WIDTH. (resetoi vaikeustason)',
+)
+parser.add_argument(
+    '-H',
+    metavar='HEIGHT',
+    type=int,
+    help='Mukautaa pelilaudan korkeudelle HEIGTH. (resetoi vaikeustason)',
+)
+parser.add_argument(
+    '-b',
+    metavar='BOMBS',
+    type=int,
+    help='Säätää pelilaulla olevien pommien määrän BOMBS:ksi. (resetoi vaikeustason)',
 )
 
 args = parser.parse_args()
 
-if args.w is None:
+if args.c is None:
     app = App(args)
     is_win = app.run()
     del app
@@ -59,9 +72,10 @@ if args.w is None:
 
 
 win_count = 0
+run_count = args.c
 args.uncertain=True
-for i in range(args.w):
-    print(end=f"    \rSuoritus {i+1:>6}/{args.w} ")
+for i in range(run_count):
+    print(end=f"    \rSuoritus {i+1:>6}/{run_count} ")
     print(end=f"({100*win_count/(i if i else 1):.1f}%)..")
     if not args.quiet:
         print()
@@ -69,4 +83,4 @@ for i in range(args.w):
     win_count+=app.run()
     del app
 
-print(f"\n## Voittoja {win_count}/{args.w} ({100*win_count/args.w:.1f}%)")
+print(f"\n## Voittoja {win_count}/{run_count} ({100*win_count/run_count:.1f}%)")
