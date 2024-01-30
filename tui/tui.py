@@ -66,7 +66,7 @@ class Tui():
             match action:
                 case Action.QUIT:
                     return (action, x, y)
-                case Action.OPEN | Action.FLAG | Action.BOMB | Action.SAFE:
+                case Action.OPEN | Action.FLAG | Action.MINE | Action.SAFE:
                     if matrix[x][y] >= 10:
                         return (action, x, y)
                 case Action.HINT:

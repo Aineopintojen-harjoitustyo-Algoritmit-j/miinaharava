@@ -11,18 +11,14 @@ class App:
         board_opts = {'level': Level.BEGINNER}
         tui_opts = {'bot': DSSPBot}
         if args:
-            if args.intermediate:
-                board_opts['level'] = Level.INTERMEDIATE
-            if args.expert:
-                board_opts['level'] = Level.EXPERT
-            if args.w:
-                board_opts['width'] = args.w
-            if args.H:
-                board_opts['height'] = args.H
-            if args.b:
-                board_opts['bombs'] = args.b
+            # pylint: disable = multiple-statements
+            if args.intermediate: board_opts['level'] = Level.INTERMEDIATE
+            if args.expert: board_opts['level'] = Level.EXPERT
+            if args.width: board_opts['width'] = args.width
+            if args.height: board_opts['height'] = args.height
+            if args.mines: board_opts['mines'] = args.mines
 
-            tui_opts['bot'] = SimpleBot if args.simple else DSSPBot
+            if args.simple: tui_opts['bot'] = SimpleBot
             tui_opts['autoplay'] = args.auto
             tui_opts['interactive'] = not args.uncertain
             tui_opts['suppress'] = args.quiet

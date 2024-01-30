@@ -14,34 +14,34 @@ class Board():
             level = Level.BEGINNER,
             width = None,
             height = None,
-            bombs = None):
+            mines = None):
 
         self.__level = level
-        self.__width, self.__height, self.__bombs =LevelSpecs[self.__level][:3]
+        self.__width, self.__height, self.__mines =LevelSpecs[self.__level][:3]
 
         if width and width in range(2,51):
             self.__width = width
         if height and height in range(2,51):
             self.__height = width
-        if bombs:
-            self.__bombs = bombs
+        if mines:
+            self.__mines = mines
 
-        if self.__bombs not in range(1,self.__width*self.__height):
-            self.__bombs = self.__width
+        if self.__mines not in range(1,self.__width*self.__height):
+            self.__mines = self.__width
 
-        if ( (self.__width, self.__height, self.__bombs)
+        if ( (self.__width, self.__height, self.__mines)
                 == LevelSpecs[self.__level][:3] ):
             self.__level_name = LevelSpecs[self.__level][3]
         else:
             self.__level_name = "Mukautettu"
 
         self.__level_name += ( f" ({self.__width}x{self.__height}"
-                    f", {self.__bombs} miinaa)" )
+                    f", {self.__mines} miinaa)" )
 
         self.__tiles = None
         self.__masked = None
         self.__initialize_tiles()
-        self.__randomize_bombs()
+        self.__randomize_mines()
         self.__calculate_neighbours()
 
 
@@ -52,14 +52,14 @@ class Board():
         self.__masked = [[Tile.UNOPENED for _ in range(h)] for _ in range(w)]
 
 
-    def __randomize_bombs(self):
+    def __randomize_mines(self):
         """ arpoo pelilaudalle pommit """
-        for _ in range(self.__bombs):
+        for _ in range(self.__mines):
             while True:
                 x, y = randrange(0,self.__width), randrange(0,self.__height)
                 if self.__tiles[x][y] != Tile.BLANK:
                     continue
-                self.__tiles[x][y] = Tile.BOMB
+                self.__tiles[x][y] = Tile.MINE
                 break
 
 
@@ -67,13 +67,13 @@ class Board():
         """ laskee naapurissa olevien pommien määrät valmiiksi laudalle """
         for y in range(self.__height):
             for x in range(self.__width):
-                if self.__tiles[x][y] == Tile.BOMB:
+                if self.__tiles[x][y] == Tile.MINE:
                     continue
-                neighbouring_bombs = 0
+                neighbouring_mines = 0
                 for nx, ny in self.get_neighbours_coords(x,y):
-                    if self.__tiles[nx][ny] == Tile.BOMB:
-                        neighbouring_bombs += 1
-                self.__tiles[x][y] = neighbouring_bombs
+                    if self.__tiles[nx][ny] == Tile.MINE:
+                        neighbouring_mines += 1
+                self.__tiles[x][y] = neighbouring_mines
 
 
     def invalid_coordinates(self, x, y):
@@ -113,7 +113,7 @@ class Board():
         """ tarkistaa onko peli voitettu """
         for y in range(self.__height):
             for x in range(self.__width):
-                if self.__tiles[x][y] == Tile.BOMB:
+                if self.__tiles[x][y] == Tile.MINE:
                     if not self.__masked[x][y]:
                         return False
                 else:
@@ -175,7 +175,7 @@ class Board():
 
         self.__masked[x][y] = 0
 
-        if self.__tiles[x][y] == Tile.BOMB:
+        if self.__tiles[x][y] == Tile.MINE:
             return False
 
         if self.__tiles[x][y] == Tile.BLANK:
@@ -198,9 +198,9 @@ class Board():
         """ palauttaa laudan korkeuden """
         return self.__height
 
-    def get_bombs(self):
+    def get_mines(self):
         """ palauttaa pommien määrän """
-        return self.__bombs
+        return self.__mines
 
     def get_level_name(self):
         """ palauttaa vaikesutason nimen"""

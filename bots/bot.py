@@ -7,7 +7,7 @@ class Bot():
     def __init__(self, **opts):
         self.uncertain = opts['uncertain'] if 'uncertain' in opts else False
         self.safe_tiles = set()
-        self.bomb_tiles = set()
+        self.mine_tiles = set()
         self.matrix = []
         self.w = 0
         self.h = 0
@@ -25,14 +25,14 @@ class Bot():
         if self.safe_tiles:
             x, y = self.safe_tiles.pop()
             return Action.SAFE, x, y
-        if self.bomb_tiles:
-            x, y = self.bomb_tiles.pop()
-            return Action.BOMB, x, y
+        if self.mine_tiles:
+            x, y = self.mine_tiles.pop()
+            return Action.MINE, x, y
         return Action.NOOP, 0, 0
 
     def saved_hints(self):
         """ onko muuveja varastossa """
-        return self.safe_tiles or self.bomb_tiles
+        return self.safe_tiles or self.mine_tiles
 
     def hint(self, matrix, cursor_x, cursor_y):
         """ antaa vinkin. tässä tapauksessa ei mitään """
@@ -73,14 +73,14 @@ class Bot():
     def remove_number_tiles(self, tiles):
         """ poistaa vapaat ja vapaaksi merkityt alueet ja numerolaatat """
         for tile in list(tiles):
-            if self.matrix[tile[0]][tile[1]] < Tile.FLAG_BOMB:
+            if self.matrix[tile[0]][tile[1]] < Tile.FLAG_MINE:
                 tiles.remove(tile)
 
-    def remove_bomb_tiles(self, tiles):
+    def remove_mine_tiles(self, tiles):
         """ poistaa pommit ja pommiksi merkityt """
         count=0
         for tile in list(tiles):
-            if self.matrix[tile[0]][tile[1]] in (Tile.BOMB, Tile.FLAG_BOMB):
+            if self.matrix[tile[0]][tile[1]] in (Tile.MINE, Tile.FLAG_MINE):
                 tiles.remove(tile)
                 count+=1
         return count
@@ -91,7 +91,7 @@ class Bot():
 
     def number_tile(self, tile):
         """ tutkii onko numerolaatta """
-        return 0 < self.matrix[tile[0]][tile[1]] < Tile.BOMB
+        return 0 < self.matrix[tile[0]][tile[1]] < Tile.MINE
 
     def count_unknowns(self, tiles):
         """ laskee tunnistamattomat laatat """

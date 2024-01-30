@@ -25,8 +25,8 @@ class DSSPBot(SimpleBot):
             n2 = self.get_neighbours(tile2)
             self.remove_number_tiles(n1)
             self.remove_number_tiles(n2)
-            c1 -= self.remove_bomb_tiles(n1)
-            c2 -= self.remove_bomb_tiles(n2)
+            c1 -= self.remove_mine_tiles(n1)
+            c2 -= self.remove_mine_tiles(n2)
 
             # otetaan vain alue1:n laatat pois vähennetään se pommeista
             # näin tiedetään montako pommia on jäätävä yhteiselle alueelle
@@ -48,8 +48,8 @@ class DSSPBot(SimpleBot):
                 for safe in n2:
                     self.safe_tiles.add(safe)
             if cc == len(nc) and c2 == len(n2):
-                for bomb in n2:
-                    self.bomb_tiles.add(bomb)
+                for mine in n2:
+                    self.mine_tiles.add(mine)
 
         return self.saved_hints()
 
@@ -58,7 +58,7 @@ class DSSPBot(SimpleBot):
         tiles = self.get_border_tiles()
         for tile in tiles:
             n = self.get_neighbours(tile)
-            c = self.get_value(tile) - self.remove_bomb_tiles(n)
+            c = self.get_value(tile) - self.remove_mine_tiles(n)
             self.remove_number_tiles(n)
             for ntile in n:
                 heatmap[ntile] += c/len(n)

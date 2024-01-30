@@ -19,7 +19,7 @@ class Action(Enum):
     BEGIN = 11
     END = 12
     NOOP = 13	# ei mitään - tarvitaan, ettei mätsää ansikoodeja esciin
-    BOMB = 14	# merkkaa pommi
+    MINE = 14	# merkkaa pommi
     SAFE = 15	# merkkaa turvallinen
 
 # ActionKeys - Ohjelma vertaa syötteen alkua näihin ja palauttaa ekan
@@ -31,7 +31,7 @@ ActionKeys = {
     "w": Action.UP,		"a": Action.LEFT,	"s": Action.DOWN,
     "d": Action.RIGHT,		" ": Action.OPEN,	"\n": Action.OPEN,
     "f": Action.FLAG,		"m": Action.FLAG,	"q": Action.QUIT,
-    "p": Action.BOMB,		"x": Action.BOMB,	"o": Action.SAFE,
+    "p": Action.MINE,		"x": Action.MINE,	"o": Action.SAFE,
     "l": Action.QUIT,		"?": Action.HINT,	"b": Action.HINT
 }
 
@@ -67,8 +67,8 @@ TileTypes = {
     Tile.SIX:		TileType( "[6]", [(0x9,0), (0x9,0), (0x9,0)] ),
     Tile.SEVEN:		TileType( "[7]", [(0x9,0), (0x9,0), (0x9,0)] ),
     Tile.EIGHT:		TileType( "[8]", [(0x9,0), (0x9,0), (0x9,0)] ),
-    Tile.BOMB:		TileType( "[@]", [(0xF,1), (0xF,1), (0xF,1)] ),
-    Tile.FLAG_BOMB:	TileType( "[×]", [(0x8,7), (0x1,7), (0x8,7)] ),
+    Tile.MINE:		TileType( "[@]", [(0xF,1), (0xF,1), (0xF,1)] ),
+    Tile.FLAG_MINE:	TileType( "[×]", [(0x8,7), (0x1,7), (0x8,7)] ),
     Tile.FLAG_FREE:	TileType( "[•]", [(0x8,7), (0x2,7), (0x8,7)] ),
     Tile.UNOPENED:	TileType( "[#]", [(0x8,7), (0x8,7), (0x8,7)] ),
     Tile.FLAG_UNKNOWN:	TileType( "[?]", [(0x8,7), (0x0,7), (0x8,7)] )

@@ -57,7 +57,7 @@ class Kbd():
         match action:
             case Action.QUIT | Action.HINT:
                 return (action, x, y)
-            case Action.OPEN | Action.FLAG | Action.BOMB | Action.SAFE:
+            case Action.OPEN | Action.FLAG | Action.MINE | Action.SAFE:
                 return (action, x, y)
             case Action.UP:
                 y = y-1 if y > 0 else 0

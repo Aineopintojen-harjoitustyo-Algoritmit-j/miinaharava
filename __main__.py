@@ -41,30 +41,34 @@ parser.add_argument(
     '-c',
     metavar='COUNT',
     type=int,
+    dest='count',
     help='Suorittaa ohelmaa COUNT kertaa ja tulostaa voitto-osuuden.',
 )
 parser.add_argument(
     '-w',
     metavar='WIDTH',
     type=int,
+    dest='width',
     help='Mukautaa pelilaudan leveydelle WIDTH. (resetoi vaikeustason)',
 )
 parser.add_argument(
     '-H',
     metavar='HEIGHT',
     type=int,
+    dest='height',
     help='Mukautaa pelilaudan korkeudelle HEIGTH. (resetoi vaikeustason)',
 )
 parser.add_argument(
-    '-b',
-    metavar='BOMBS',
+    '-m',
+    metavar='MINES',
     type=int,
-    help='Säätää pelilaulla olevien pommien määrän BOMBS:ksi. (resetoi vaikeustason)',
+    dest='mines',
+    help='Säätää pelilaulla olevien pommien määrän MINES:ksi. (resetoi vaikeustason)',
 )
 
 args = parser.parse_args()
 
-if args.c is None:
+if args.count is None:
     app = App(args)
     is_win = app.run()
     del app
@@ -72,7 +76,7 @@ if args.c is None:
 
 
 win_count = 0
-run_count = args.c
+run_count = args.count
 args.uncertain=True
 for i in range(run_count):
     print(end=f"    \rSuoritus {i+1:>6}/{run_count} ")

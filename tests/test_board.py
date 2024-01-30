@@ -16,14 +16,14 @@ class TestBoardClass(unittest.TestCase):
         b = Board(level=Level.EXPERT)
         self.assertEqual(b.get_width(), LevelSpecs[Level.EXPERT][0])
         self.assertEqual(b.get_height(), LevelSpecs[Level.EXPERT][1])
-        self.assertEqual(b.get_bombs(), LevelSpecs[Level.EXPERT][2])
+        self.assertEqual(b.get_mines(), LevelSpecs[Level.EXPERT][2])
 
     def test_init_with_incorect_dimensions(self):
         """ luominen ei saa onnitua mahdottomilla mitoilla """
         b = Board(width=1, height=999)
         self.assertEqual(b.get_width(), LevelSpecs[Level.BEGINNER][0])
         self.assertEqual(b.get_height(), LevelSpecs[Level.BEGINNER][1])
-        self.assertEqual(b.get_bombs(), LevelSpecs[Level.BEGINNER][2])
+        self.assertEqual(b.get_mines(), LevelSpecs[Level.BEGINNER][2])
 
     def test_get_view_and_guess(self):
         """ laudan näkymä on oikein senkin jälkeen kun on arvattu"""
@@ -109,5 +109,5 @@ class TestBoardClass(unittest.TestCase):
         """ Testataan että nykyinen vaikeustaso palautuu oikein """
         b = Board(level=Level.INTERMEDIATE)
         self.assertIn(LevelSpecs[Level.INTERMEDIATE][3], b.get_level_name())
-        b = Board(level=Level.INTERMEDIATE, width=25, bombs=2)
+        b = Board(level=Level.INTERMEDIATE, width=25, mines=2)
         self.assertIn("Mukautettu", b.get_level_name())

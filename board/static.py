@@ -20,8 +20,8 @@ class Tile(IntEnum):
     SIX = 6
     SEVEN = 7
     EIGHT = 8
-    BOMB = 9
-    FLAG_BOMB = 10
+    MINE = 9
+    FLAG_MINE = 10
     FLAG_FREE = 11
     UNOPENED = 12
     FLAG_UNKNOWN = 13

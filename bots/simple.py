@@ -12,13 +12,13 @@ class SimpleBot(Bot):
             c = self.get_value(tile)
             n = self.get_neighbours(tile)
             self.remove_number_tiles(n)
-            c -= self.remove_bomb_tiles(n)
+            c -= self.remove_mine_tiles(n)
             if c == 0:
                 for safe in n:
                     self.safe_tiles.add(safe)
             if c == len(n):
-                for bomb in n:
-                    self.bomb_tiles.add(bomb)
+                for mine in n:
+                    self.mine_tiles.add(mine)
         return self.saved_hints()
 
     def lucky_guess(self):
