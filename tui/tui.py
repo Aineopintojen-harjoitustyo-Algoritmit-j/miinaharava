@@ -7,27 +7,34 @@ from .ansi_draw import AnsiDraw, SuppressDraw
 
 class Tui():
     """ Tui - Luokka käyttäjän interaktiota varten """
-    # pylint: disable = unused-argument
-    def __init__(self, **opts):
-        self.bot = opts['bot'] if 'bot' in opts else None
-        self.autoplay = opts['autoplay'] if 'autoplay' in opts else False
-        self.interact = opts['interact'] if 'interact' in opts else True
-        self.suppress = opts['suppress'] if 'suppress' in opts else False
-        self.height = opts['height'] if 'height' in opts else 15
+    # pylint: disable = too-many-arguments
+    def __init__(self,
+                bot = None,
+                autoplay = False,
+                interactive = True,
+                suppress = False,
+                height = 9):
+
+        self.autoplay = autoplay
+        self.interactive = interactive
+        self.suppress = suppress
+        self.height = height
 
         # jos ei oo bottia pitää olla interaktiivinen
-        if self.bot is None:
+        if bot is None:
             self.autoplay = False
-            self.interact = True
+            self.interactive = True
             self.suppress = False
 
         # jos ei mitään näytetä ei voi olla interaktiivinen
-        self.interact = False if self.suppress else self.interact
+        self.interactive = False if self.suppress else self.interactive
 
         # automaattipeli pitää olla päällä jos ei interaktiivinen
-        self.autoplay = self.autoplay if self.interact else True
+        self.autoplay = self.autoplay if self.interactive else True
 
-        if self.interact:
+        self.bot = bot(uncertain=not self.interactive) if bot else None
+
+        if self.interactive:
             self.kbd = Kbd()
         else:
             self.kbd = NoKbd()
@@ -49,7 +56,7 @@ class Tui():
 
 
         # ilman näppiskäsittelijää voidaan lopettaa
-        if not self.interact:
+        if not self.interactive:
             return Action.QUIT, 0, 0
 
         w, h = len(matrix), len(matrix[0])
@@ -84,6 +91,6 @@ class Tui():
 
     def game_end(self, matrix):
         """ tehtävät ihan pelin lopuksi """
-        if self.interact:
+        if self.interactive:
             self.draw.matrix(matrix, -1, -1)
             self.draw.status_line("Kiitos!             ")
