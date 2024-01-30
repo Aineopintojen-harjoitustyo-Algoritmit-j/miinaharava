@@ -78,7 +78,7 @@ class Tui():
         self.draw.matrix(matrix, x, y)
         self.draw.status_line(
             f"{self.level_name}: " +
-            "K  " if self.suppress else f"{'Kuolit!':<30}"
+            ("K  " if self.suppress else f"{'Kuolit!':<30}")
         )
         self.kbd.read_action()
 
@@ -87,7 +87,7 @@ class Tui():
         self.draw.matrix(matrix, x, y)
         self.draw.status_line(
             f"{self.level_name}: " +
-            "V  " if self.suppress else "{'Voitit!':<30}"
+            ("V  " if self.suppress else f"{'Voitit!':<30}")
         )
         self.kbd.read_action()
 
