@@ -7,37 +7,37 @@ from .ansi_draw import AnsiDraw, SuppressDraw
 
 class Tui():
     """ Tui - Luokka käyttäjän interaktiota varten """
-    # pylint: disable = too-many-arguments
+    # pylint: disable = too-many-arguments, too-many-instance-attributes
     def __init__(self,
                 bot = None,
                 autoplay = False,
                 interactive = True,
                 suppress = False,
-                height = 9):
+                height = 9,
+                level_name = "outo lauta"):
+
+        # jos ei ole bottia pitää olla interaktiivinen
+        if bot is None:
+            autoplay = False
+            interactive = True
+            suppress = False
+
+        # jos ei mitään näytetä ei voi olla interaktiivinen
+        # pylint: disable = pointless-statement
+        (interactive := False) if suppress else ()
+
+        # automaattipeli pitää olla päällä jos ei interaktiivinen
+        (autoplay := True) if not interactive else ()
 
         self.autoplay = autoplay
         self.interactive = interactive
         self.suppress = suppress
         self.height = height
-
-        # jos ei oo bottia pitää olla interaktiivinen
-        if bot is None:
-            self.autoplay = False
-            self.interactive = True
-            self.suppress = False
-
-        # jos ei mitään näytetä ei voi olla interaktiivinen
-        self.interactive = False if self.suppress else self.interactive
-
-        # automaattipeli pitää olla päällä jos ei interaktiivinen
-        self.autoplay = self.autoplay if self.interactive else True
+        self.level_name = level_name
 
         self.bot = bot(uncertain=not self.interactive) if bot else None
 
-        if self.interactive:
-            self.kbd = Kbd()
-        else:
-            self.kbd = NoKbd()
+        self.kbd = Kbd() if self.interactive else NoKbd()
 
         if self.suppress:
             self.draw = SuppressDraw()
@@ -77,7 +77,8 @@ class Tui():
         """ tehtävät kun kuolee """
         self.draw.matrix(matrix, x, y)
         self.draw.status_line(
-            "K  " if self.suppress else "Peli ohitse! Kuolit!"
+            f"{self.level_name}: " +
+            f"{'K' if self.suppress else 'Peli ohitse! Kuolit!':<30}"
         )
         self.kbd.read_action()
 
@@ -85,7 +86,8 @@ class Tui():
         """ tehtävät kun voittaa """
         self.draw.matrix(matrix, x, y)
         self.draw.status_line(
-            "V  " if self.suppress else "Peli ohitse! Voitit!"
+            f"{self.level_name}: " +
+            f"{'V' if self.suppress else 'Peli ohitse! Voitit!':<30}"
         )
         self.kbd.read_action()
 
@@ -93,4 +95,7 @@ class Tui():
         """ tehtävät ihan pelin lopuksi """
         if self.interactive:
             self.draw.matrix(matrix, -1, -1)
-            self.draw.status_line("Kiitos!             ")
+            self.draw.status_line(
+                f"{self.level_name}: " +
+                f"{'Kiitos!':<30}"
+            )
