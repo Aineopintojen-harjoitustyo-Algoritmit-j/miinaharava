@@ -10,22 +10,33 @@ class Board():
     """	Board - Luokka joka pitää huolen pelilaudasta ja siihen kohdistuvista
                 siirroista.
     """
-    def __init__(self, **opts):
+    def __init__(self,
+            level = Level.BEGINNER,
+            width = None,
+            height = None,
+            bombs = None):
 
-        self.__level = opts["level"] if "level" in opts else Level.BEGINNER
-        self.__width, self.__height, self.__bombs = LevelSpecs[self.__level]
+        self.__level = level
+        self.__width, self.__height, self.__bombs =LevelSpecs[self.__level][:3]
 
-        self.__width = opts["width"] if "width" in opts else self.__width
-        self.__height = opts["height"] if "height" in opts else self.__height
-        self.__bombs = opts["bombs"] if "bombs" in opts else self.__bombs
-
-        if self.__width not in range(2,51):
-            self.__width = LevelSpecs[self.__level][0]
-        if self.__height not in range(2,51):
-            self.__height = LevelSpecs[self.__level][0]
+        if width and width in range(2,51):
+            self.__width = width
+        if height and height in range(2,51):
+            self.__height = width
+        if bombs:
+            self.__bombs = bombs
 
         if self.__bombs not in range(1,self.__width*self.__height):
             self.__bombs = self.__width
+
+        if ( (self.__width, self.__height, self.__bombs)
+                == LevelSpecs[self.__level][:3] ):
+            self.__level_name = LevelSpecs[self.__level][3]
+        else:
+            self.__level_name = "Mukautettu"
+
+        self.__level_name += ( f" ({self.__width}x{self.__height}"
+                    f", {self.__bombs} miinaa)" )
 
         self.__tiles = None
         self.__masked = None
@@ -191,7 +202,6 @@ class Board():
         """ palauttaa pommien määrän """
         return self.__bombs
 
-    def get_level(self):
-        """ palauttaa vaikesutason """
-        return self.__level if (self.__width, self.__height, self.__bombs) \
-                == LevelSpecs[self.__level] else None
+    def get_level_name(self):
+        """ palauttaa vaikesutason nimen"""
+        return self.__level_name

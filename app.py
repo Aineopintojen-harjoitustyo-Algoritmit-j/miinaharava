@@ -29,6 +29,7 @@ class App:
             tui_opts['height'] = LevelSpecs[board_opts['level']][1]
 
         self.board = Board(**board_opts)
+        tui_opts['level_name']=self.board.get_level_name()
         self.ui = Tui(**tui_opts)
         self.game = Game(self.board,self.ui)
 

@@ -42,7 +42,7 @@ class Tui():
         if self.suppress:
             self.draw = SuppressDraw()
         else:
-            self.draw = AnsiDraw(height=self.height)
+            self.draw = AnsiDraw(height=self.height, name=self.level_name)
 
     def matrix_selector(self, matrix, x, y):
         """ valinta matriisita """
@@ -78,7 +78,7 @@ class Tui():
         self.draw.matrix(matrix, x, y)
         self.draw.status_line(
             f"{self.level_name}: " +
-            f"{'K' if self.suppress else 'Peli ohitse! Kuolit!':<30}"
+            "K  " if self.suppress else f"{'Kuolit!':<30}"
         )
         self.kbd.read_action()
 
@@ -87,7 +87,7 @@ class Tui():
         self.draw.matrix(matrix, x, y)
         self.draw.status_line(
             f"{self.level_name}: " +
-            f"{'V' if self.suppress else 'Peli ohitse! Voitit!':<30}"
+            "V  " if self.suppress else "{'Voitit!':<30}"
         )
         self.kbd.read_action()
 

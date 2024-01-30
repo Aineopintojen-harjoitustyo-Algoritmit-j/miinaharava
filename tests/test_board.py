@@ -108,6 +108,6 @@ class TestBoardClass(unittest.TestCase):
     def test_get_level(self):
         """ Testataan että nykyinen vaikeustaso palautuu oikein """
         b = Board(level=Level.INTERMEDIATE)
-        self.assertEqual(b.get_level(), Level.INTERMEDIATE)
-        b = Board(level=Level.INTERMEDIATE, width=25)
-        self.assertEqual(b.get_level(), None)
+        self.assertIn(LevelSpecs[Level.INTERMEDIATE][3], b.get_level_name())
+        b = Board(level=Level.INTERMEDIATE, width=25, bombs=2)
+        self.assertIn("Mukautettu", b.get_level_name())

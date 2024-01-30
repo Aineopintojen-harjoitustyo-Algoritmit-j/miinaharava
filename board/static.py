@@ -28,7 +28,7 @@ class Tile(IntEnum):
 
 
 LevelSpecs = {
-    Level.BEGINNER:	(  9,  9, 10 ),
-    Level.INTERMEDIATE:	( 16, 16, 40 ),
-    Level.EXPERT:	( 30, 16, 99 )
+    Level.BEGINNER:	(  9,  9, 10, "Aloittelija"),
+    Level.INTERMEDIATE:	( 16, 16, 40, "Keskivaikea"),
+    Level.EXPERT:	( 30, 16, 99, "Edistynyt")
 }

@@ -5,8 +5,8 @@ from .static import TileTypes
 
 class AnsiDraw():
     """ AnsiDraw - "piirtelee" näytölle kirjailmilla """
-    def __init__(self, height = 15):
-        print(end="\n"*height)
+    def __init__(self, height = 9, name = ""):
+        print(end='\n'*height+name+": Peli alkaa.")
 
     def __del__(self):
         print()
