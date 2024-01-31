@@ -30,24 +30,25 @@ ActionKeys = {
     "\033[": Action.NOOP,	"\033": Action.QUIT,	"t": Action.SAFE,
     "w": Action.UP,		"a": Action.LEFT,	"s": Action.DOWN,
     "d": Action.RIGHT,		" ": Action.OPEN,	"\n": Action.OPEN,
-    "f": Action.FLAG,		"m": Action.FLAG,	"q": Action.QUIT,
-    "p": Action.MINE,		"x": Action.MINE,	"o": Action.SAFE,
-    "l": Action.QUIT,		"?": Action.HINT,	"b": Action.HINT
+    "l": Action.QUIT,		"?": Action.HINT,	"b": Action.HINT,
+    "f": Action.FLAG,		"q": Action.QUIT,	"m": Action.MINE,
+    "\t": Action.FLAG,		"9": Action.MINE,	"0": Action.SAFE
 }
 
-KEY_DESCRIPTIONS = """
-Liikkuminen:
-    YLÖS,ALAS,VASEN,OIKEA,PGDN,PGUP,HOME,END,w,a,s,d
-Merkitseminen:
-    m - merkitse
-    p,x - pommi
-    t,o - turvallinen
-Avaaminen:
-    ENTER, SPACE
-Vinkki:
-    ?, b - pyydä botilta vihje
-Lopetus:
-    l,q,ESC    
+KEY_DESCRIPTIONS = """Näppäinasettelu:
+
+  YLÖS, ALAS, VASEN, OIKEA, PGDN, PGUP, HOME, END, w, a, s, d
+                       Kursorin liikuttaminen pelilaudalla
+  
+  ENTER, SPACE         Avaa laatta
+  
+  f, TAB               Vaihda laatan merkintää
+  m, 9                 Merkitse miinaksi
+  t, 0                 Merkitse turvalliseksi
+  
+  ?, b                 Vihje tekoälyltä
+
+  l, q, ESC            Pelin lopetus
 """
 
 @dataclass

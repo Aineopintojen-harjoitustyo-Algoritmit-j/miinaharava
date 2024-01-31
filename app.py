@@ -1,5 +1,5 @@
 """ app.py - pääohjelma """
-from board import Board, Level, LevelSpecs
+from board import Board, Level
 from tui import Tui
 from game import Game
 from bots import SimpleBot, DSSPBot
@@ -14,18 +14,20 @@ class App:
             # pylint: disable = multiple-statements
             if args.intermediate: board_opts['level'] = Level.INTERMEDIATE
             if args.expert: board_opts['level'] = Level.EXPERT
-            if args.width: board_opts['width'] = args.width
-            if args.height: board_opts['height'] = args.height
             if args.mines: board_opts['mines'] = args.mines
+            if args.size:
+                board_opts['width'] = args.size[0]
+                board_opts['height'] = args.size[1]
 
-            if args.simple: tui_opts['bot'] = SimpleBot
-            tui_opts['autoplay'] = args.auto
-            tui_opts['interactive'] = not args.uncertain
+            if args.bot==0: tui_opts['bot'] = None
+            if args.bot==1: tui_opts['bot'] = SimpleBot
+            tui_opts['autoplay'] = args.autoplay > 0
+            tui_opts['interactive'] = args.autoplay != 2
             tui_opts['suppress'] = args.quiet
-            tui_opts['height'] = LevelSpecs[board_opts['level']][1]
 
         self.board = Board(**board_opts)
-        tui_opts['level_name']=self.board.get_level_name()
+        tui_opts['level_name'] = self.board.get_level_name()
+        tui_opts['height'] = self.board.get_height()
         self.ui = Tui(**tui_opts)
         self.game = Game(self.board,self.ui)
 
