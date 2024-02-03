@@ -53,7 +53,7 @@ hint_group.add_argument(
 )
 hint_group.add_argument(
     '-b', '--bot', metavar='<B>',
-    choices=range(2),
+    choices=range(3),
     type=int,
     default=2,
     help='Valitsee tekoälyn <B>, missä: 0: Ei tekoälyä  1: Yksinkertainen, 2: DSSP (oletus)',

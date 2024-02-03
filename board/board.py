@@ -66,7 +66,7 @@ class Board():
         for line in board:
             if len(line)!=w:
                 return False
-        if self.__get_board_mines(board) not in range (1, w*h - 1):
+        if self.__get_board_mines(board) not in range (1, w*h):
             return False
         return True
 

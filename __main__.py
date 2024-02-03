@@ -27,13 +27,19 @@ if args.file is None:
         del app
 else:
     run_count = 0
-    print(f"Pelataan miinaharavat tiedostosta {args.file}")
     with open(args.file, "r", encoding="utf-8") as bfile:
         board = []
         while True:
             line = bfile.readline()
             if not line or (line[0]!='.' and line[0]!='@'):
                 if board:
+                    win_percent = (100*win_count/run_count) if run_count else 0
+                    print(end=
+                        f"    \rAjo ...{args.file[-18:]:} ({run_count+1}): "
+                        f"({win_percent:.1f}%).."
+                    )
+                    if not args.quiet:
+                        print()
                     args.board = board
                     app = App(args)
                     win_count += app.run()

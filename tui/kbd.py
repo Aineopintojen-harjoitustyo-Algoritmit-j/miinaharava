@@ -1,6 +1,6 @@
 """ tui/kbd.py - näppäimistön käsittellijä """
 # pylint: disable = multiple-imports
-import termios, fcntl, sys, os
+import termios, fcntl, sys, os, io
 from time import sleep
 from .static import ActionKeys, Action
 
@@ -21,21 +21,29 @@ class Kbd():
         # Vaatii hieman terminaaliasetusten muokkaamista jotta yksittäiset
         # napin painallukset voidaan lukea
         # https://stackoverflow.com/questions/983354/how-do-i-wait-for-a-pressed-key
-        fd = sys.stdin.fileno()
-        self.oldterm = termios.tcgetattr(fd)
+        try:
+            fd = sys.stdin.fileno()
+            self.oldterm = termios.tcgetattr(fd)
 
-        newattr = termios.tcgetattr(fd)
-        newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
-        termios.tcsetattr(fd, termios.TCSANOW, newattr)
+            newattr = termios.tcgetattr(fd)
+            newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
+            termios.tcsetattr(fd, termios.TCSANOW, newattr)
 
-        self.oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
-        fcntl.fcntl(fd, fcntl.F_SETFL, self.oldflags | os.O_NONBLOCK)
+            self.oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
+            fcntl.fcntl(fd, fcntl.F_SETFL, self.oldflags | os.O_NONBLOCK)
+        # Testeissä ei voi mukata termilaalia
+        except io.UnsupportedOperation:
+            pass
 
     def __del__(self):
         # palautetaan terminaali takaisin alkupetäiseen uskoon
-        fd = sys.stdin.fileno()
-        termios.tcsetattr(fd, termios.TCSAFLUSH, self.oldterm)
-        fcntl.fcntl(fd, fcntl.F_SETFL, self.oldflags)
+        try:
+            fd = sys.stdin.fileno()
+            termios.tcsetattr(fd, termios.TCSAFLUSH, self.oldterm)
+            fcntl.fcntl(fd, fcntl.F_SETFL, self.oldflags)
+        # Testeissä ei voi mukata termilaalia
+        except io.UnsupportedOperation:
+            pass
 
     def read_action(self):
         """ lukee näppäimistölä käyttäjän toiminnon """
