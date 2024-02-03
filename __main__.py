@@ -4,6 +4,8 @@ from app import App
 
 from cmdline import args
 
+vars(args)['board'] = None
+
 if args.count is None and args.file is None:
     app = App(args)
     is_win = app.run()
@@ -11,9 +13,9 @@ if args.count is None and args.file is None:
     sys.exit(not is_win)	# Exit koodeissa 0 on onnistunut suoritus
 
 win_count = 0
-args.autoplay = 2
 
 if args.file is None:
+    args.autoplay = 2
     run_count = args.count
     for i in range(run_count):
         print(end=f"    \rSuoritus {i+1:>6}/{run_count} ")
@@ -32,8 +34,7 @@ else:
             line = bfile.readline()
             if not line or (line[0]!='.' and line[0]!='@'):
                 if board:
-                    args_dict = vars(args)
-                    args_dict['board'] = board
+                    args.board = board
                     app = App(args)
                     win_count += app.run()
                     run_count += 1

@@ -14,7 +14,9 @@ class Board():
             level = Level.BEGINNER,
             width = None,
             height = None,
-            mines = None):
+            mines = None,
+            board = None):
+        # pylint: disable = too-many-arguments
 
         self.__level = level
         self.__width, self.__height, self.__mines =LevelSpecs[self.__level][:3]
@@ -29,9 +31,17 @@ class Board():
         if self.__mines not in range(1,self.__width*self.__height):
             self.__mines = self.__width
 
-        if ( (self.__width, self.__height, self.__mines)
-                == LevelSpecs[self.__level][:3] ):
-            self.__level_name = LevelSpecs[self.__level][3]
+
+        if board and self.__validate_board(board):
+            self.__width, self.__height = self.__get_board_dimensions(board)
+            self.__mines = self.__get_board_mines(board)
+        else:
+            board = None
+
+        for _, specs in LevelSpecs.items():
+            if (self.__width, self.__height, self.__mines) == specs[:3]:
+                self.__level_name = specs[3]
+                break
         else:
             self.__level_name = "Mukautettu"
 
@@ -40,10 +50,40 @@ class Board():
 
         self.__tiles = None
         self.__masked = None
+
         self.__initialize_tiles()
-        self.__randomize_mines()
+        if board:
+            self.__populate_with_board(board)
+        else:
+            self.__randomize_mines()
         self.__calculate_neighbours()
 
+    def __validate_board(self, board):
+        w = len(board[0])
+        h = len(board)
+        if w not in range(2,51) or h not in range(2,51):
+            return False
+        for line in board:
+            if len(line)!=w:
+                return False
+        if self.__get_board_mines(board) not in range (1, w*h - 1):
+            return False
+        return True
+
+
+    def __get_board_dimensions(self, board):
+        return len(board[0]), len(board)
+
+
+    def __get_board_mines(self, board):
+        return sum((sum(x) for x in board))
+
+
+    def __populate_with_board(self, board):
+        for y in range(self.__height):
+            for x in range(self.__width):
+                if board[y][x]:
+                    self.__tiles[x][y] = Tile.MINE
 
     def __initialize_tiles(self):
         """ alustaa pelilaudan matriisit """

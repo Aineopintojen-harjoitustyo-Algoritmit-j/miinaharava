@@ -14,10 +14,13 @@ class App:
             # pylint: disable = multiple-statements
             if args.intermediate: board_opts['level'] = Level.INTERMEDIATE
             if args.expert: board_opts['level'] = Level.EXPERT
-            if args.mines: board_opts['mines'] = args.mines
-            if args.size:
-                board_opts['width'] = args.size[0]
-                board_opts['height'] = args.size[1]
+            if args.board:
+                board_opts['board'] = args.board
+            else:
+                if args.mines: board_opts['mines'] = args.mines
+                if args.size:
+                    board_opts['width'] = args.size[0]
+                    board_opts['height'] = args.size[1]
 
             if args.bot==0: tui_opts['bot'] = None
             if args.bot==1: tui_opts['bot'] = SimpleBot

@@ -22,5 +22,11 @@ Miinaharava ratkaisijalla
 ### Käyttöohjeet
 `python3 miinaharava -h`
 
+### Pelaa automaattisesti keskivaikea lauta
+`python3 miinaharava -i -aa`
+
 ### Automaattipelaa 10 peliä
 `python3 miinaharava -c 10`
+
+### Pelaa kentät tiedostosta
+`python3 miinaharava -f miinaharava/tests/data/beginner_3win.txt`
