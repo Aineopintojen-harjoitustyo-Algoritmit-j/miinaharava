@@ -111,3 +111,19 @@ class TestBoardClass(unittest.TestCase):
         self.assertIn(LevelSpecs[Level.INTERMEDIATE][3], b.get_level_name())
         b = Board(level=Level.INTERMEDIATE, width=25, mines=2)
         self.assertIn("Mukautettu", b.get_level_name())
+
+    def test_board_invalid(self):
+        """ Yritetään luoda peli kelvottomalla laudalla """
+        b = Board(board=[[0,0,0,0,0],[0,0,0,1],[0,0,0,0,0]])
+        self.assertIn(LevelSpecs[Level.BEGINNER][3], b.get_level_name())
+        b = Board(board=[[0,0,0,0,0]])
+        self.assertIn(LevelSpecs[Level.BEGINNER][3], b.get_level_name())
+        b = Board(board=[[0,0,0,0],[0,0,0,0],[0,0,0,0]])
+        self.assertIn(LevelSpecs[Level.BEGINNER][3], b.get_level_name())
+
+    def test_board_valid(self):
+        """ Luodaan peli kelvollisella laudalla """
+        b = Board(board=[[0,0,0,0],[0,0,0,1],[0,0,0,0]])
+        self.assertEqual(b.get_width(), 4)
+        self.assertEqual(b.get_height(), 3)
+        self.assertEqual(b.get_mines(), 1)
