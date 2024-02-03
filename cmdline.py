@@ -1,4 +1,8 @@
+""" cmdline.py - komentorivin käsittely argparse moduulilla """
+import sys
 from argparse import ArgumentParser
+
+from tui import KEY_DESCRIPTIONS
 
 parser = ArgumentParser(
     prog='miinaharava',
@@ -99,3 +103,10 @@ misc_group.add_argument(
 
 args = parser.parse_args()
 
+if args.help:
+    parser.print_help()
+    sys.exit()
+
+if args.keys:
+    print(end=KEY_DESCRIPTIONS)
+    sys.exit()
