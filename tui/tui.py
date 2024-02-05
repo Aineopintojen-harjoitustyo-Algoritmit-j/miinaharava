@@ -1,6 +1,4 @@
 """ tui/tui.py - runko käyttöliittymälle """
-# pylint: disable = multiple-imports
-#from time import sleep
 import time
 from .static import Action
 from .kbd import Kbd, NoKbd
