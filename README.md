@@ -15,7 +15,7 @@ Miinaharava ratkaisijalla
 ## Ohjeet:
 
 ### Asenna
-`git clone https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava`
+`mkdir miinaharava && wget -O - https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava/archive/refs/tags/v0.1-alpha.tar.gz | tar xz --strip-components=1 --directory=miinaharava`
 
 ### Pelaa
 `python3 miinaharava`
