@@ -2,6 +2,7 @@
 # pylint: disable = missing-class-docstring, too-few-public-methods
 
 from io import StringIO
+from time import time
 import unittest
 from unittest.mock import patch
 
@@ -14,9 +15,13 @@ class KbdTest:
     def __init__(self, actions):
         self.actions = actions
     def read_action(self):
-        return self.actions.pop(0) if self.actions else (Action.NOOP)
+        if self.actions:
+            action, _, _ = self.actions.pop(0)
+        else:
+            action = Action.NOOP
+        return action
     def read_matrix_action(self, w, h, x, y):
-        return (self.actions.pop(0), 0, 0) if self.actions else (Action.NOOP,0,0)
+        return self.actions.pop(0) if self.actions else (Action.NOOP,x,y)
 
 
 class TestAppClass(unittest.TestCase):
@@ -68,6 +73,11 @@ class TestAppClass(unittest.TestCase):
                 [0,1,1,0,1,1,0,1,0]
             ]
 
+    mini_board = [
+                [0,0],
+                [0,1]
+            ]
+
 
     def test_run(self):
         """ Testataan että edes pyörähtää """
@@ -79,8 +89,8 @@ class TestAppClass(unittest.TestCase):
         """ Testataan Quittaamista """
         app = App()
         app.ui.kbd=KbdTest([
-            Action.QUIT,
-            Action.OPEN
+            (Action.QUIT,0,0),
+            (Action.OPEN,0,0)
         ])
         app.run()
         del app
@@ -159,8 +169,8 @@ class TestAppClass(unittest.TestCase):
             bot = 0
         app = App(args)
         app.ui.kbd=KbdTest([
-            Action.SAFE,
-            Action.OPEN
+            (Action.SAFE,0,0),
+            (Action.OPEN,0,0)
         ])
         self.assertTrue(app.run())
         del app
@@ -172,9 +182,9 @@ class TestAppClass(unittest.TestCase):
             autoplay = 0
         app = App(args)
         app.ui.kbd=KbdTest([
-            Action.FLAG,
-            Action.MINE,
-            Action.OPEN
+            (Action.FLAG,0,0),
+            (Action.MINE,0,0),
+            (Action.OPEN,0,0)
         ])
         self.assertFalse(app.run())
         del app
@@ -186,10 +196,42 @@ class TestAppClass(unittest.TestCase):
             autoplay = 1
         app = App(args)
         app.ui.kbd=KbdTest([
-            Action.NOOP,
-            Action.NOOP,
-            Action.OPEN,
-            Action.HINT
+            (Action.OPEN,0,0),
+            (Action.HINT,0,0),
+        ])
+        self.assertTrue(app.run())
+        del app
+
+    def test_delay(self):
+        """ Hidastus toimii """
+        class args(self.default_args):
+            board = self.dssp_win_board
+            autoplay = 2
+            delay = 5
+        app = App(args)
+        app.ui.kbd=KbdTest([
+            (Action.OPEN,0,0),
+            (Action.HINT,0,0),
+        ])
+        duration = time()
+        self.assertTrue(app.run())
+        duration = time() - duration
+        del app
+        self.assertTrue( duration > 0.5 )
+
+    def test_botless_play(self):
+        """ Hidastus toimii """
+        class args(self.default_args):
+            board = self.mini_board
+            autoplay = 0
+            delay = 50000
+        app = App(args)
+        app.ui.kbd=KbdTest([
+            (Action.OPEN,0,0),
+            (Action.HINT,0,0),
+            (Action.OPEN,1,0),
+            (Action.HINT,0,0),
+            (Action.OPEN,0,1)
         ])
         self.assertTrue(app.run())
         del app

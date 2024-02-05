@@ -42,7 +42,6 @@ class SuppressDraw():
 
     def matrix(self, matrix, hx, hy):
         """ "piirtää" ruudukon """
-        return True
 
     def status_line(self, text):
         """ draw_status_line - tulostaa pelitietorivin"""
@@ -54,8 +53,6 @@ class NoDraw():
 
     def matrix(self, matrix, hx, hy):
         """ "piirtää" ruudukon """
-        return True
 
     def status_line(self, text):
         """ draw_status_line - tulostaa pelitietorivin"""
-        return True

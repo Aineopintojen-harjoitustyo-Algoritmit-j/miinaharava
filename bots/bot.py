@@ -107,14 +107,6 @@ class Bot():
                 count+=1
         return count
 
-    def remove_unknowns(self, tiles):
-        """ poistaa tunnistamattomat laatat """
-        count=0
-        for tile in list(tiles):
-            if not self.known_tile(tile):
-                tiles.remove(tile)
-                count+=1
-            return count
 
     def get_interesting_tiles(self):
         """ palauttaa laatat joiden naapureissa on vaihtelua """
