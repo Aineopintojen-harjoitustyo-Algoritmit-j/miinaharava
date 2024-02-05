@@ -12,22 +12,10 @@ Miinaharava ratkaisijalla
 - [viikko 2](doc/viikkoraportti2.pdf)
 - [viikko 3](doc/viikkoraportti3.pdf)
   
-## Ohjeet:
+## Ohjeita:
 
-### Asenna
+### Asennus
 `mkdir miinaharava && wget -O - https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava/archive/refs/tags/v0.1-alpha.tar.gz | tar xz --strip-components=1 --directory=miinaharava`
 
-### Pelaa
-`python3 miinaharava`
-
-### Käyttöohjeet
-`python3 miinaharava -h`
-
-### Automaattipelaa hidastettuna keskivaikea lauta
-`python3 miinaharava -i -aa -d 30`
-
-### Automaattipelaa 10 peliä
-`python3 miinaharava -c 10`
-
-### Pelaa kentät tiedostosta
-`python3 miinaharava -f miinaharava/testdata/beginner_3win.txt`
+### Käyttöohje
+- [käyttöohje](doc/k\303\244ytt\303\266ohje.pdf)

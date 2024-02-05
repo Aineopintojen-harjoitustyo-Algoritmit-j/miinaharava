@@ -24,7 +24,7 @@ class Board():
         if width and width in range(2,51):
             self.__width = width
         if height and height in range(2,51):
-            self.__height = width
+            self.__height = height
         if mines:
             self.__mines = mines
 
