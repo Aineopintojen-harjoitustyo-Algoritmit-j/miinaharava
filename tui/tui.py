@@ -1,5 +1,6 @@
 """ tui/tui.py - runko käyttöliittymälle """
 # pylint: disable = multiple-imports
+from time import sleep
 from .static import Action
 from .kbd import Kbd, NoKbd
 from .ansi_draw import AnsiDraw, SuppressDraw
@@ -14,7 +15,8 @@ class Tui():
                 interactive = True,
                 suppress = False,
                 height = 9,
-                level_name = "outo lauta"):
+                level_name = "outo lauta",
+                delay = 0):
 
         # jos ei ole bottia pitää olla interaktiivinen
         if bot is None:
@@ -23,17 +25,22 @@ class Tui():
             suppress = False
 
         # jos ei mitään näytetä ei voi olla interaktiivinen
-        # pylint: disable = pointless-statement
-        (interactive := False) if suppress else ()
+        if suppress:
+            interactive = False
 
         # automaattipeli pitää olla päällä jos ei interaktiivinen
-        (autoplay := True) if not interactive else ()
+        if not interactive:
+            autoplay = True
+
+        if delay and delay not in range(0,500):
+            delay = 50
 
         self.autoplay = autoplay
         self.interactive = interactive
         self.suppress = suppress
         self.height = height
         self.level_name = level_name
+        self.delay = delay
 
         self.bot = bot(uncertain=not self.interactive) if bot else None
 
@@ -51,7 +58,9 @@ class Tui():
         if self.autoplay:
             action, x, y = self.bot.hint(matrix, x, y)
             if action != Action.NOOP:
-                self.draw.matrix(matrix, -1, -1)
+                if self.delay:
+                    self.draw.matrix(matrix, x, y)
+                    sleep(self.delay/100)
                 return Action.OPEN if action==Action.SAFE else action, x, y
 
 

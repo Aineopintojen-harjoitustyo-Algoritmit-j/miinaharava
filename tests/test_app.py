@@ -30,6 +30,7 @@ class TestAppClass(unittest.TestCase):
         size = None
         bot = None
         quiet = None
+        delay = None
 
     sure_win_board = [
                 [0,0,0,0,0,0,0,0,0],

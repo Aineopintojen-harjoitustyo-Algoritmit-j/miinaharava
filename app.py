@@ -27,6 +27,7 @@ class App:
             tui_opts['autoplay'] = args.autoplay > 0
             tui_opts['interactive'] = args.autoplay != 2
             tui_opts['suppress'] = args.quiet
+            tui_opts['delay'] = args.delay
 
         self.board = Board(**board_opts)
         tui_opts['level_name'] = self.board.get_level_name()

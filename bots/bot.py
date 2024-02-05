@@ -31,7 +31,13 @@ class Bot():
         return Action.NOOP, 0, 0
 
     def saved_hints(self):
-        """ onko muuveja varastossa """
+        """ poistetaan auenneet laatat ja palautetaan onko muuveja """
+        for tile in list(self.safe_tiles):
+            if self.known_tile(tile):
+                self.safe_tiles.remove(tile)
+        for tile in list(self.mine_tiles):
+            if self.known_tile(tile):
+                self.mine_tiles.remove(tile)
         return self.safe_tiles or self.mine_tiles
 
     def hint(self, matrix, cursor_x, cursor_y):

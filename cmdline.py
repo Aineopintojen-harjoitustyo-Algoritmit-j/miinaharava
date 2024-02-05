@@ -24,7 +24,7 @@ level_group.add_argument(
 
 custom_group = parser.add_argument_group('Mukautettu vaikeustaso')
 def board_size(wxh_string):
-    """ parser for dimensions. throws error on bad input"""
+    """ parsija laudan koolle, että on varmasti muotoa {leveys}x{korkeys} """
     w, h = wxh_string.split('x')
     return (int(w), int(h))
 custom_group.add_argument(
@@ -39,7 +39,7 @@ custom_group.add_argument(
     metavar='<M>',
     type=int,
     dest='mines',
-    help='Säätää pelilaulla olevien pommien määrän <M>:ksi.',
+    help='Säätää pelilaulla olevien miinojen määrän <M>:ksi.',
 )
 
 
@@ -57,6 +57,11 @@ hint_group.add_argument(
     type=int,
     default=2,
     help='Valitsee tekoälyn <B>, missä: 0: Ei tekoälyä  1: Yksinkertainen, 2: DSSP (oletus)',
+)
+hint_group.add_argument(
+    '-d', '--delay', metavar='<D>',
+    type=float,
+    help='Odottaa ennen tekoälyn siirtoa <D> sadasosasekuntia.',
 )
 
 batch_group = parser.add_argument_group('Automatisointi')
