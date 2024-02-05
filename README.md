@@ -18,4 +18,4 @@ Miinaharava ratkaisijalla
 `mkdir miinaharava && wget -O - https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava/archive/refs/tags/v0.1-alpha.tar.gz | tar xz --strip-components=1 --directory=miinaharava`
 
 ### Käyttöohje
-- [käyttöohje](doc/k\303\244ytt\303\266ohje.pdf)
+- [käyttöohje](doc/käyttöohje.pdf)
