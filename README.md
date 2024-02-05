@@ -30,4 +30,4 @@ Miinaharava ratkaisijalla
 `python3 miinaharava -c 10`
 
 ### Pelaa kentät tiedostosta
-`python3 miinaharava -f miinaharava/tests/data/beginner_3win.txt`
+`python3 miinaharava -f miinaharava/testdata/beginner_3win.txt`
