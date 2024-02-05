@@ -2,13 +2,13 @@
 # pylint: disable = missing-class-docstring, too-few-public-methods
 
 from io import StringIO
-from time import time
 import unittest
 from unittest.mock import patch
 
 from app import App
 
 from tui import Action
+
 
 class KbdTest:
     # pylint: disable = unused-argument, missing-function-docstring
@@ -206,18 +206,22 @@ class TestAppClass(unittest.TestCase):
         """ Hidastus toimii """
         class args(self.default_args):
             board = self.dssp_win_board
-            autoplay = 2
             delay = 5
         app = App(args)
-        app.ui.kbd=KbdTest([
-            (Action.OPEN,0,0),
-            (Action.HINT,0,0),
-        ])
-        duration = time()
-        self.assertTrue(app.run())
-        duration = time() - duration
+        with patch('time.sleep') as patched_sleep:
+            self.assertTrue(app.run())
         del app
-        self.assertTrue( duration > 0.5 )
+        patched_sleep.assert_called()
+
+    def test_delay_can_be_off(self):
+        """ Hidastus ei ole aina päälle """
+        class args(self.default_args):
+            board = self.dssp_win_board
+        app = App(args)
+        with patch('time.sleep') as patched_sleep:
+            self.assertTrue(app.run())
+        del app
+        patched_sleep.assert_not_called()
 
     def test_botless_play(self):
         """ Hidastus toimii """

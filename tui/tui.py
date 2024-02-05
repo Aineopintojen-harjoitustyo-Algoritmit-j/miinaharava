@@ -1,6 +1,7 @@
 """ tui/tui.py - runko käyttöliittymälle """
 # pylint: disable = multiple-imports
-from time import sleep
+#from time import sleep
+import time
 from .static import Action
 from .kbd import Kbd, NoKbd
 from .ansi_draw import AnsiDraw, SuppressDraw
@@ -60,7 +61,7 @@ class Tui():
             if action != Action.NOOP:
                 if self.delay:
                     self.draw.matrix(matrix, x, y)
-                    sleep(self.delay/100)
+                    time.sleep(self.delay/100)
                 return Action.OPEN if action==Action.SAFE else action, x, y
 
 
