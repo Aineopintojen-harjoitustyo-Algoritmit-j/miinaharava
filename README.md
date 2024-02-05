@@ -23,8 +23,8 @@ Miinaharava ratkaisijalla
 ### Käyttöohjeet
 `python3 miinaharava -h`
 
-### Pelaa automaattisesti keskivaikea lauta
-`python3 miinaharava -i -aa`
+### Automaattipelaa hidastettuna keskivaikea lauta
+`python3 miinaharava -i -aa -d 30`
 
 ### Automaattipelaa 10 peliä
 `python3 miinaharava -c 10`
