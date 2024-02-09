@@ -6,11 +6,13 @@ Miinaharava ratkaisijalla
 ## Dokumentit:
 - [määrittelydokumentti](doc/m%C3%A4%C3%A4rittelydokumentti.pdf)
 - [toteutusdokumentti](doc/toteutusdokumentti.pdf)
+- [testausdokumentti](doc/testausdokumentti.pdf)
 
 ### Viikkoraportit
 - [viikko 1](doc/viikkoraportti1.pdf)
 - [viikko 2](doc/viikkoraportti2.pdf)
 - [viikko 3](doc/viikkoraportti3.pdf)
+- [viikko 4](doc/viikkoraportti4.pdf)
   
 ## Ohjeita:
 
