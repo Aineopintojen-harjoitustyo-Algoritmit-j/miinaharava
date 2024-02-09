@@ -20,11 +20,10 @@ build-backend = "poetry.core.masonry.api"
 [tool.pylint.main]
 recursive = true
 source-roots = ["./"]
+# Jostain syystä paikallisesti b._Board__tiles privatti tietojen lukemisen
+# aiheuttamaa linttausvirhettä ei voi disabloida test_board.py:ssä.
+ignore-patterns = 'test_board'
 
 [tool.pylint.basic]
-docstring-min-length = 0
 
 [tool.pylint.messages]
-# Jostain syystä paikallisesti b._Board__tiles privatti tietojen lukemisen
-# aiheuttamaa linttausvirhettä ei voinut disabloida.
-disable = "invalid-name"

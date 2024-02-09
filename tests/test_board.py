@@ -1,14 +1,19 @@
 """test_board.py - Testit pelilaudalle"""
-# pylint: disable = protected-access
+# Tämä tiedosto on jätettty pylint testien ulkopuolelle, koska tässä tehdään
+# paljon "kiellettyjä asioita", kuten käydään lukemassa luokan "privaatteja"
+# muuttujia
 
 import unittest
 from board import Board, Level, LevelSpecs
 
 class TestBoardClass(unittest.TestCase):
-    """ pelilauden testit"""
-    def test_init(self):
-        """ olion luominen onnistuu """
+    """ pelilauden testit kattava luokka """
+    def test_init_works_and_defaults_beginner(self):
+        """ pelilautaolion luominen onnistuu ja defaulttaa aloittelijaksi """
         b = Board()
+        self.assertEqual(b.get_width(), LevelSpecs[Level.BEGINNER][0])
+        self.assertEqual(b.get_height(), LevelSpecs[Level.BEGINNER][1])
+        self.assertEqual(b.get_mines(), LevelSpecs[Level.BEGINNER][2])
         self.assertTrue(b.get_width()>0)
 
     def test_init_with_level(self):
@@ -25,23 +30,90 @@ class TestBoardClass(unittest.TestCase):
         self.assertEqual(b.get_height(), LevelSpecs[Level.BEGINNER][1])
         self.assertEqual(b.get_mines(), LevelSpecs[Level.BEGINNER][2])
 
+    def matrixs_equals(self, m1, m2):
+        """ apufunktio testaa onko matriisit samat """
+        # onko edes samaa kokoa ?
+        if len(m1)!=len(m2):
+            return False
+        for i in range(len(m1)):
+            if m1[i] != m2[i]:
+                return False
+        return True
+        
+    
+    def test_init_with_valid_board(self):
+        """ Pelilaudan luominen onnistuu kelvollisella asettelulla """
+        t = [
+            [0,0,0,0],
+            [0,0,0,1],
+            [0,0,0,0]
+        ]
+        b = Board(board = t)
+        self.assertEqual(b.get_width(), 4)
+        self.assertEqual(b.get_height(), 3)
+        self.assertEqual(b.get_mines(), 1)
+
+    def test_init_board_is_masked_right(self):
+        """ Luodun pelilaudan laatat ja peitteet on asetettu oikein """
+        t = [
+            [0,0,0,0],
+            [0,0,0,1],
+            [0,0,0,0]
+        ]
+        b = Board(board = t)
+        self.assertEqual(b.get_width(), 4)
+        self.assertEqual(b.get_height(), 3)
+        self.assertEqual(b.get_mines(), 1)
+
+        # testataan onko laatat tallennettu oikein luokkaan
+        t = [
+            [0,0,0],
+            [0,0,0],
+            [1,1,1],
+            [1,9,1]
+        ]
+        self.assertTrue(self.matrixs_equals(b._Board__tiles, t))
+
+        # onko maksit asetettu oikein
+        t = [
+            [12,12,12],
+            [12,12,12],
+            [12,12,12],
+            [12,12,12]
+        ]
+        self.assertTrue(self.matrixs_equals(b._Board__masked, t))
+
     def test_get_view_and_guess(self):
-        """ laudan näkymä on oikein senkin jälkeen kun on arvattu"""
-        b = Board(width=3, height=3)
-        b._Board__tiles=[[0,0,0],[0,1,1],[0,1,9]]
+        """ laudan näkymä on oikein senkin jälkeen kun on arvattu """
+        
+        t = [
+            [0,0,1],
+            [0,0,0],
+            [0,0,0]
+        ]
+        b = Board(board=t)
 
-        v = b.get_view()
-        t = [[12,12,12],[12,12,12],[12,12,12]]
-        for i in range(3):
-            self.assertEqual(v[i],t[i])
+        # Antaahan pelikenttä pelkkää maskia aluksi
+        t = [
+            [12,12,12],
+            [12,12,12],
+            [12,12,12]
+        ]
+        self.assertTrue(self.matrixs_equals(b.get_view(), t))
 
+        # avataan yläkulma -> palatuu True
         self.assertTrue(b.guess(0,0))
-        v = b.get_view()
-        t = [[0,0,0],[0,1,1],[0,1,12]]
-        for i in range(3):
-            self.assertEqual(v[i],t[i])
 
-        self.assertFalse(b.guess(2,2))
+        # onko näkymä nyt oikein
+        t = [
+            [0,0,0],
+            [1,1,0],
+            [12,1,0]
+        ]
+        self.assertTrue(self.matrixs_equals(b.get_view(), t))
+
+        # avataan alakulma jossa miina -> palautuu False
+        self.assertFalse(b.guess(2,0))
 
     def test_is_winning(self):
         """ toimiiko voittotilanteen tunnistus """
@@ -121,9 +193,3 @@ class TestBoardClass(unittest.TestCase):
         b = Board(board=[[0,0,0,0],[0,0,0,0],[0,0,0,0]])
         self.assertIn(LevelSpecs[Level.BEGINNER][3], b.get_level_name())
 
-    def test_board_valid(self):
-        """ Luodaan peli kelvollisella laudalla """
-        b = Board(board=[[0,0,0,0],[0,0,0,1],[0,0,0,0]])
-        self.assertEqual(b.get_width(), 4)
-        self.assertEqual(b.get_height(), 3)
-        self.assertEqual(b.get_mines(), 1)

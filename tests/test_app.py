@@ -26,7 +26,7 @@ class KbdTest:
 
 class TestAppClass(unittest.TestCase):
     """ Testit itse appille """
-    class default_args:
+    class DefaultArgs:
         autoplay = 2
         intermediate = None
         expert = None
@@ -81,7 +81,7 @@ class TestAppClass(unittest.TestCase):
 
     def test_run(self):
         """ Testataan että edes pyörähtää """
-        app = App(self.default_args)
+        app = App(self.DefaultArgs)
         app.run()
         del app
 
@@ -97,77 +97,77 @@ class TestAppClass(unittest.TestCase):
 
     def test_many_games(self):
         """ Varman voiton lauta palauttaa true """
-        class args(self.default_args):
+        class Args(self.DefaultArgs):
             quiet = True
         for _ in range(50):
-            app = App(args)
+            app = App(Args)
             app.run()
             del app
-        args.intermediate = True
+        Args.intermediate = True
         for _ in range(20):
-            app = App(args)
+            app = App(Args)
             app.run()
             del app
-        args.expert = True
+        Args.expert = True
         for _ in range(10):
-            app = App(args)
+            app = App(Args)
             app.run()
             del app
 
     def test_sure_win(self):
         """ Varman voiton lauta palauttaa true """
-        class args(self.default_args):
+        class Args(self.DefaultArgs):
             board = self.sure_win_board
             quiet = True
-        app = App(args)
+        app = App(Args)
         self.assertTrue(app.run())
         del app
 
     def test_dssp_win(self):
         """ Varman voiton lauta palauttaa true """
-        class args(self.default_args):
+        class Args(self.DefaultArgs):
             board = self.dssp_win_board
-        app = App(args)
+        app = App(Args)
         self.assertTrue(app.run())
         del app
 
     def test_no_dssp_win_with_simple(self):
         """ Varman voiton lauta palauttaa true """
-        class args(self.default_args):
+        class Args(self.DefaultArgs):
             board = self.dssp_win_board
             quiet = True
             bot = 1
         while True:
-            app = App(args)
+            app = App(Args)
             if not app.run():
                 break
             del app
 
     def test_sure_lose(self):
         """ Varman häviön lauta palauttaa false """
-        class args(self.default_args):
+        class Args(self.DefaultArgs):
             board = self.sure_lose_board
-        app = App(args)
+        app = App(Args)
         self.assertFalse(app.run())
         del app
 
     def test_custom_size(self):
         """ Varman häviön lauta palauttaa false """
-        class args(self.default_args):
+        class Args(self.DefaultArgs):
             size = (4, 4)
         with patch('sys.stdout', new = StringIO()) as captured:
-            app = App(args)
+            app = App(Args)
             app.run()
             self.assertIn("Mukautettu (4x4", captured.getvalue())
             del app
 
     def test_sure_win_with_actions(self):
         """ Varman voiton lauta palauttaa true """
-        class args(self.default_args):
+        class Args(self.DefaultArgs):
             board = self.sure_win_board
             autoplay = 0
             bot = 0
-        app = App(args)
+        app = App(Args)
         app.ui.kbd=KbdTest([
             (Action.SAFE,0,0),
             (Action.OPEN,0,0)
@@ -177,10 +177,10 @@ class TestAppClass(unittest.TestCase):
 
     def test_sure_lose_with_actions(self):
         """ Varman voiton lauta palauttaa true """
-        class args(self.default_args):
+        class Args(self.DefaultArgs):
             board = self.sure_lose_board
             autoplay = 0
-        app = App(args)
+        app = App(Args)
         app.ui.kbd=KbdTest([
             (Action.FLAG,0,0),
             (Action.MINE,0,0),
@@ -191,10 +191,10 @@ class TestAppClass(unittest.TestCase):
 
     def test_auto_play_hints(self):
         """ Vihjeiden automaattipelaaminen toimii """
-        class args(self.default_args):
+        class Args(self.DefaultArgs):
             board = self.dssp_win_board
             autoplay = 1
-        app = App(args)
+        app = App(Args)
         app.ui.kbd=KbdTest([
             (Action.OPEN,0,0),
             (Action.HINT,0,0),
@@ -204,10 +204,10 @@ class TestAppClass(unittest.TestCase):
 
     def test_delay(self):
         """ Hidastus toimii """
-        class args(self.default_args):
+        class Args(self.DefaultArgs):
             board = self.dssp_win_board
             delay = 5
-        app = App(args)
+        app = App(Args)
         with patch('time.sleep') as patched_sleep:
             self.assertTrue(app.run())
         del app
@@ -215,9 +215,9 @@ class TestAppClass(unittest.TestCase):
 
     def test_delay_can_be_off(self):
         """ Hidastus ei ole aina päälle """
-        class args(self.default_args):
+        class Args(self.DefaultArgs):
             board = self.dssp_win_board
-        app = App(args)
+        app = App(Args)
         with patch('time.sleep') as patched_sleep:
             self.assertTrue(app.run())
         del app
@@ -225,11 +225,11 @@ class TestAppClass(unittest.TestCase):
 
     def test_botless_play(self):
         """ Hidastus toimii """
-        class args(self.default_args):
+        class Args(self.DefaultArgs):
             board = self.mini_board
             autoplay = 0
             delay = 50000
-        app = App(args)
+        app = App(Args)
         app.ui.kbd=KbdTest([
             (Action.OPEN,0,0),
             (Action.HINT,0,0),
