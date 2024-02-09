@@ -18,14 +18,19 @@ class Board():
             board = None):
         # pylint: disable = too-many-arguments
 
+        if ( not width or not height or
+                width not in range(2,51) or
+                height not in range(2,51) ):
+            width, height = None, None
+
         self.__level = level
         self.__width, self.__height, self.__mines =LevelSpecs[self.__level][:3]
 
-        if width and width in range(2,51):
+        if width:
             self.__width = width
-        if height and height in range(2,51):
+        if height:
             self.__height = height
-        if mines:
+        if height or width or mines:
             self.__mines = mines
 
         if self.__mines not in range(1,self.__width*self.__height):

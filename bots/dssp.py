@@ -40,16 +40,12 @@ class DSSPBot(SimpleBot):
                 continue
 
             # vähennetään yhteinen alue ja sen pommit alueesta 2
-            # jos jäljelle ei jää pommeja merkataan seiffeiks
-            # jos avaamattomia pommien määrä merkataan pommeiks
+            # jos jäljelle ei jää miinoja merkataan alueet seiffeiks
             c2 -= cc
 
             if c2 == 0:
                 for safe in n2:
                     self.safe_tiles.add(safe)
-            if cc == len(nc) and c2 == len(n2):
-                for mine in n2:
-                    self.mine_tiles.add(mine)
 
         return self.saved_hints()
 

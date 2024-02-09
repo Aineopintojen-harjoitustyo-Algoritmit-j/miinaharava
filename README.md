@@ -17,6 +17,10 @@ Miinaharava ratkaisijalla
 ## Ohjeita:
 
 ### Asennus
+#### Kloonaamalla uusin
+`git clone https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava`
+`python3 miinaharava`
+#### Lataamalla jokin tietty versio
 `mkdir miinaharava && wget -O - https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava/archive/refs/tags/v0.1-beta.tar.gz | tar xz --strip-components=1 --directory=miinaharava`
 
 ### Käyttöohje
