@@ -1,8 +1,8 @@
 """ tests/test_board.py - Testit pelilaudalle """
 
 import unittest
-from board import Board, Level, LevelSpecs
 
+from board import Board, Level, LevelSpecs
 
 def matrix_equals(m1, m2):
     """ matrix_equals - apufunktio testaa onko matriisit samat """

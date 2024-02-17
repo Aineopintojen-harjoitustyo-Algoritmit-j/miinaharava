@@ -1,6 +1,7 @@
 """ tui/static.py - Staattiset määritykset tui:ssa tarvittaville jutuille. """
 from enum import Enum
 from dataclasses import dataclass
+
 from board import Tile
 
 class Action(Enum):

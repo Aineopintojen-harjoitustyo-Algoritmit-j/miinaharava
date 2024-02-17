@@ -1,5 +1,6 @@
 """ bots/simple.py - yksinkertainen botti joka etsii vain yhdeltä laatalta """
 from random import sample
+
 from .bot import Bot
 
 class SimpleBot(Bot):

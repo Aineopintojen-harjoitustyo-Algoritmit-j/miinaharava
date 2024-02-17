@@ -13,6 +13,7 @@ Miinaharava ratkaisijalla
 - [viikko 2](doc/viikkoraportti2.pdf)
 - [viikko 3](doc/viikkoraportti3.pdf)
 - [viikko 4](doc/viikkoraportti4.pdf)
+- [viikko 5](doc/viikkoraportti5.pdf)
   
 ## Ohjeita:
 
@@ -22,7 +23,7 @@ Miinaharava ratkaisijalla
 `python3 miinaharava`
 #### Lataamalla jokin tietty versio
 `wget -O -
-https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava/archive/refs/tags/v0.1-gamma.tar.gz | tar xz --strip-components=1 --one-top-level=miinaharava`
+https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava/archive/refs/tags/v0.1-delta.tar.gz | tar xz --strip-components=1 --one-top-level=miinaharava`
 
 ### Käyttöohje
 - [käyttöohje](doc/käyttöohje.pdf)

@@ -1,5 +1,6 @@
 """ bots/dssp.py - päättelee kahden vierekkäisen laatan perusteella """
 from random import sample
+
 from .simple import SimpleBot
 
 class DSSPBot(SimpleBot):
