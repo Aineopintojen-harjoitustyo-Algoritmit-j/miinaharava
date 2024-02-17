@@ -1,6 +1,6 @@
 [run]
 branch = True
-omit = tests/*, tui/kbd.py
+omit = src/miinaharava/tui/kbd.py
 
 [report]
 exclude_lines =
