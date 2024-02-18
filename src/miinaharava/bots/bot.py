@@ -24,13 +24,12 @@ class Bot():
 
     def get_hint_from_list(self):
         """ Hakee vihjeen suoraan vapaiden tai miinojen joukoista. """
-        if self.safe_tiles:
-            x, y = self.safe_tiles.pop()
-            return Action.SAFE, x, y
-        if self.mine_tiles:
-            x, y = self.mine_tiles.pop()
-            return Action.MINE, x, y
-        return Action.NOOP, 0, 0
+        for action, tiles in (
+                (Action.SAFE, self.safe_tiles),
+                (Action.MINE, self.mine_tiles)):
+            if tiles:
+                return action, *tiles.pop()
+        return Action.NOOP, 0, 0	# Tänne ei koskaan päädytä
 
     def saved_hints(self):
         """ Kertoo onko miinojen tai vapaiden joukossa jäljellä vihjeitä.
