@@ -35,7 +35,7 @@ jobs:
 
       # Run coverage xml
       - name: Run unittests with coverage and generate xml
-        run: poetry run dev covxml
+        run: ./dev.sh covxml
         
       # xml -> codecov
       - name: Upload coverage reports to Codecov
@@ -45,4 +45,4 @@ jobs:
           
       # pylint
       - name: Run pylint against the code
-        run: poetry run pylint
+        run: ./dev.sh pylint
