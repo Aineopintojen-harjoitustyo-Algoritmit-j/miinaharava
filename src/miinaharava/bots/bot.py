@@ -34,12 +34,10 @@ class Bot():
     def saved_hints(self):
         """ Kertoo onko miinojen tai vapaiden joukossa jäljellä vihjeitä.
         Siivoaa samalla joukoista jo avatut laatat."""
-        for tile in list(self.safe_tiles):
-            if self.known_tile(tile):
-                self.safe_tiles.remove(tile)
-        for tile in list(self.mine_tiles):
-            if self.known_tile(tile):
-                self.mine_tiles.remove(tile)
+        for tiles in (self.safe_tiles, self.mine_tiles):
+            for tile in list(tiles):
+                if self.known_tile(tile):
+                    tiles.remove(tile)
         return self.safe_tiles or self.mine_tiles
 
     def hint(self, matrix, cursor_x, cursor_y):
@@ -47,13 +45,11 @@ class Bot():
         vain nykyisen paikan ilman toimintoa. """
         self.matrix = matrix
         self.w, self.h = self.get_dimensions()
-
-        if self.saved_hints():
-            return self.get_hint_from_list()
-        if self.search():
-            return self.get_hint_from_list()
-        if self.uncertain and self.lucky_guess():
-            return self.get_hint_from_list()
+        def ok_to_guess():
+            return self.lucky_guess() if self.uncertain else False
+        for step in (self.saved_hints, self.search, ok_to_guess ):
+            if step():
+                return self.get_hint_from_list()
         return Action.NOOP, cursor_x, cursor_y
 
     def get_dimensions(self):
@@ -114,9 +110,8 @@ class Bot():
         for x in range(self.w):
             for y in range(self.h):
                 if self.number_tile((x,y)):
-                    neighbours = self.get_neighbours((x,y))
-                    unknown_count = self.count_unknowns(neighbours)
-                    if unknown_count in range(1,len(neighbours)-1):
+                    nbrs = self.get_neighbours((x,y))
+                    if self.count_unknowns(nbrs) in range(1,len(nbrs)-1):
                         tiles.add((x,y))
         return tiles
 
@@ -127,8 +122,7 @@ class Bot():
         for x in range(self.w):
             for y in range(self.h):
                 if self.number_tile((x,y)):
-                    n = self.get_neighbours((x,y))
-                    if self.count_unknowns(n):
+                    if self.count_unknowns(self.get_neighbours((x,y))):
                         tiles.add((x,y))
         return tiles
 
