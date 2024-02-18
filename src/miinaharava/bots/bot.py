@@ -86,7 +86,8 @@ class Bot():
                 tiles.remove(tile)
 
     def remove_mine_tiles(self, tiles):
-        """ Poistaa pommit ja pommiksi merkityt joukosta. """
+        """ Poistaa miinat ja miinoiksi merkityt joukosta sekä palauttaa
+        montako poistettiin """
         count=0
         for tile in list(tiles):
             if self.matrix[tile[0]][tile[1]] in (Tile.MINE, Tile.FLAG_MINE):
@@ -104,12 +105,7 @@ class Bot():
 
     def count_unknowns(self, tiles):
         """ Laskee laatat jotka on sekä avaamattomia että merkitsemättömiä. """
-        count=0
-        for tile in list(tiles):
-            if not self.known_tile(tile):
-                count+=1
-        return count
-
+        return sum(not self.known_tile(tile) for tile in tiles)
 
     def get_interesting_tiles(self):
         """ Etsii laattojen joukon, jossa jokainen laatta on numerolaatta
@@ -118,10 +114,9 @@ class Bot():
         for x in range(self.w):
             for y in range(self.h):
                 if self.number_tile((x,y)):
-                    n = self.get_neighbours((x,y))
-                    l = len(n)
-                    r = self.count_unknowns(n)
-                    if r in range(1,l-1):
+                    neighbours = self.get_neighbours((x,y))
+                    unknown_count = self.count_unknowns(neighbours)
+                    if unknown_count in range(1,len(neighbours)-1):
                         tiles.add((x,y))
         return tiles
 
