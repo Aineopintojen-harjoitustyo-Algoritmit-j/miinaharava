@@ -35,7 +35,7 @@ jobs:
 
       # Run coverage xml
       - name: Run unittests with coverage and generate xml
-        run: poetry run covxml
+        run: poetry run dev covxml
         
       # xml -> codecov
       - name: Upload coverage reports to Codecov

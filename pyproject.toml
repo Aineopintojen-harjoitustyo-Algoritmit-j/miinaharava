@@ -15,12 +15,7 @@ coverage = "^7.4.0"
 pylint = "^3.0.3"
 
 [tool.poetry.scripts]
-pylint = "dev:dev_pylint"
-pytest = "dev:dev_pytest"
-covhtml = "dev:dev_covhtml"
-covxml = "dev:dev_covxml"
-covff = "dev:dev_covff"
-all = "dev:dev_all"
+dev = "dev:dev_command"
 
 [build-system]
 requires = ["poetry-core"]
