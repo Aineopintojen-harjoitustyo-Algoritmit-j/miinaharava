@@ -75,7 +75,7 @@ class Bot():
         """ Palauttaa kysytyn laatan tiedot. """
         return self.matrix[tile[0]][tile[1]]
 
-    def remove_number_tiles(self, tiles):
+    def remove_known_safe_tiles(self, tiles):
         """ Poistaa vapaat, vapaaksi merkityt ja numerolaatat joukosta. """
         for tile in list(tiles):
             if self.matrix[tile[0]][tile[1]] < Tile.FLAG_MINE:

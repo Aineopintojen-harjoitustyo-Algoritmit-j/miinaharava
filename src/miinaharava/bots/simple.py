@@ -7,24 +7,25 @@ class SimpleBot(Bot):
     """ SimpleBot - perustyhmä botti """
 
     def search(self):
-        """ simple_search - jos viereisten avaamattomien määrä tästmää """
+        """ Etsitään laattoja jotka tietyllä laatalla olevan numeron sekä
+        sitä ympäröivien tuntemattomien laattojen määrän johdosta täytyy olla
+        joko miinoja tai vapaita. Yhdistetään ne kyseisiin joukkoihin. """
         tiles = self.get_interesting_tiles()
         for tile in tiles:
             c = self.get_value(tile)
-            n = self.get_neighbours(tile)
-            self.remove_number_tiles(n)
-            c -= self.remove_mine_tiles(n)
+            nbrs = self.get_neighbours(tile)
+            self.remove_known_safe_tiles(nbrs)
+            c -= self.remove_mine_tiles(nbrs)
             if c == 0:
-                for safe in n:
-                    self.safe_tiles.add(safe)
-            if c == len(n):
-                for mine in n:
-                    self.mine_tiles.add(mine)
+                self.safe_tiles |= nbrs
+            if c == len(nbrs):
+                self.mine_tiles |= nbrs
         return self.saved_hints()
 
     def lucky_guess(self):
-        tiles = self.get_unknown_tiles()
+        """ Arvotaan laatta tuntemattomista ja lisätään vapaiden joukkoon """
+        tiles = list(self.get_unknown_tiles())
         if tiles:
-            self.safe_tiles.add(sample(sorted(tiles),1)[0])
+            self.safe_tiles.add(sample(tiles,1)[0])
             return True
         return False

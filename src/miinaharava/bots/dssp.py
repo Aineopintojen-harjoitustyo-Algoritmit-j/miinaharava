@@ -24,8 +24,8 @@ class DSSPBot(SimpleBot):
             c2 = self.get_value(tile2)
             n1 = self.get_neighbours(tile1)
             n2 = self.get_neighbours(tile2)
-            self.remove_number_tiles(n1)
-            self.remove_number_tiles(n2)
+            self.remove_known_safe_tiles(n1)
+            self.remove_known_safe_tiles(n2)
             c1 -= self.remove_mine_tiles(n1)
             c2 -= self.remove_mine_tiles(n2)
 
@@ -56,7 +56,7 @@ class DSSPBot(SimpleBot):
         for tile in tiles:
             n = self.get_neighbours(tile)
             c = self.get_value(tile) - self.remove_mine_tiles(n)
-            self.remove_number_tiles(n)
+            self.remove_known_safe_tiles(n)
             for ntile in n:
                 heatmap[ntile] += c/len(n)
 
