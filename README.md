@@ -7,6 +7,8 @@ Miinaharava ratkaisijalla
 - [määrittelydokumentti](doc/m%C3%A4%C3%A4rittelydokumentti.pdf)
 - [toteutusdokumentti](doc/toteutusdokumentti.pdf)
 - [testausdokumentti](doc/testausdokumentti.pdf)
+- [haarakattavuusraportti @codecov.io](https://codecov.io/gh/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava)
+
 
 ### Viikkoraportit
 - [viikko 1](doc/viikkoraportti1.pdf)
@@ -14,6 +16,7 @@ Miinaharava ratkaisijalla
 - [viikko 3](doc/viikkoraportti3.pdf)
 - [viikko 4](doc/viikkoraportti4.pdf)
 - [viikko 5](doc/viikkoraportti5.pdf)
+- [viikko 6](doc/viikkoraportti6.pdf)
   
 ## Ohjeita:
 
@@ -25,7 +28,7 @@ Miinaharava ratkaisijalla
 `python3 miinaharava`
 
 #### Lataamalla jokin tietty versio
-`wget -O - https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava/archive/refs/tags/v0.1-delta.tar.gz | tar xz --strip-components=1 --one-top-level=miinaharava`
+`wget -O - https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava/archive/refs/tags/v0.1.tar.gz | tar xz --strip-components=1 --one-top-level=miinaharava`
 
 ### Käyttöohje
 - [käyttöohje](doc/käyttöohje.pdf)
