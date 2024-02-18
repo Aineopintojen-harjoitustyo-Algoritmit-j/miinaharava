@@ -91,8 +91,12 @@ class Bot():
                 count+=1
         return count
 
+    def are_neighbours(self, tile1, tile2):
+        """ Kertoo ovatko laatat naapureita keskenään """
+        return abs(tile1[0]-tile2[0])==1 or abs(tile1[1]-tile2[1])==1
+
     def known_tile(self, tile):
-        """ Kortoo onko laatta merkitty tai avattu. """
+        """ Kertoo onko laatta merkitty tai avattu. """
         return self.matrix[tile[0]][tile[1]] < Tile.UNOPENED
 
     def number_tile(self, tile):

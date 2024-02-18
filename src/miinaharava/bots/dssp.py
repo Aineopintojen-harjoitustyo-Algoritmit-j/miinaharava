@@ -4,22 +4,27 @@ from random import sample
 from .simple import SimpleBot
 
 class DSSPBot(SimpleBot):
-    """ DSSPBot - perustyhmä botti """
+    """ Kahta pistettä tutkiva tekoäly. Käyttää pohjana SipleBot tekoälyä """
 
-    def search(self):
-        """ search - etsii kahden vierekkäisen laatan perusteella"""
-        if super().search():
-            return True
+    def get_pairs(self):
+        """ Etsii kiinnostavien laattojen joukosta vierekkäiset """
         tiles = list(self.get_interesting_tiles())
         pairs = []
-        # pylint: disable = consider-using-enumerate
-        for i in range(len(tiles)):
-            for j in range(i+1,len(tiles)):
-                if abs(tiles[i][0]-tiles[j][0])==1 or abs(tiles[i][1]-tiles[j][1])==1:
-                    pairs.append((tiles[i],tiles[j]))
-                    pairs.append((tiles[j],tiles[i]))
+        for i, tile1 in enumerate(tiles):
+            for _, tile2 in enumerate(tiles, i+1):
+                if self.are_neighbours(tile1,tile2):
+                    pairs.append((tile1,tile2))
+                    pairs.append((tile2,tile1))
+        return pairs
 
-        for tile1, tile2 in pairs:
+    def search(self):
+        """ Etsitään voiko viereisen numerolaatan osoittamat miinat ja
+        epävarmat poistamalla päätellä onko jokin nykyisen laatan tuntematon
+        vapaa. """
+        if super().search():
+            return True
+
+        for tile1, tile2 in self.get_pairs():
             c1 = self.get_value(tile1)
             c2 = self.get_value(tile2)
             n1 = self.get_neighbours(tile1)
@@ -45,8 +50,7 @@ class DSSPBot(SimpleBot):
             c2 -= cc
 
             if c2 == 0:
-                for safe in n2:
-                    self.safe_tiles.add(safe)
+                self.safe_tiles |= n2
 
         return self.saved_hints()
 
