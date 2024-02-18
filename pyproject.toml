@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "miinaharava"
-version = "0.1"
+version = "0.2-alpha"
 description = "Miinaharava ratkaisijalla"
 authors = ["Aineopintojen-harjoitustyo-Algoritmit-j <github-hy-tiralabra@v.hix.fi>"]
 readme = "README.md"

@@ -40,7 +40,7 @@ class Bot():
                     tiles.remove(tile)
         return self.safe_tiles or self.mine_tiles
 
-    def hint(self, matrix, cursor_x, cursor_y):
+    def hint(self, matrix):
         """ Kysyy tekoälyltä vihjettä. Joko palauttaa vihjeen, arvauksen tai
         vain nykyisen paikan ilman toimintoa. """
         self.matrix = matrix
@@ -50,7 +50,7 @@ class Bot():
         for step in (self.saved_hints, self.search, ok_to_guess ):
             if step():
                 return self.get_hint_from_list()
-        return Action.NOOP, cursor_x, cursor_y
+        return Action.NOOP, 0, 0
 
     def get_dimensions(self):
         """ Apufunktio joka palauttaa pelilaudan mitat. """

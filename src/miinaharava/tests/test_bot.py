@@ -26,7 +26,7 @@ class TestBotClass(unittest.TestCase):
 
             tested = set()
             while True:
-                action, x, y = bot.hint(brd.get_view(), 0, 0)
+                action, x, y = bot.hint(brd.get_view())
                 if (x,y) in tested:
                     break
                 tested.add((x,y))

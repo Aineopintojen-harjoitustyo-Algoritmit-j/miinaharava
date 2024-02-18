@@ -55,12 +55,12 @@ class Tui():
 
         # automaattipeli avaa botin vinkit heti
         if self.autoplay:
-            action, x, y = self.bot.hint(matrix, x, y)
+            action, bx, by = self.bot.hint(matrix)
             if action != Action.NOOP:
                 if self.delay:
-                    self.draw.matrix(matrix, x, y)
+                    self.draw.matrix(matrix, bx, by)
                     time.sleep(self.delay/100)
-                return Action.OPEN if action==Action.SAFE else action, x, y
+                return Action.OPEN if action==Action.SAFE else action, bx, by
 
 
         # ilman näppiskäsittelijää voidaan lopettaa
@@ -79,7 +79,10 @@ class Tui():
                         return (action, x, y)
                 case Action.HINT:
                     if self.bot is not None:
-                        return self.bot.hint(matrix, x, y)
+                        action, bx, by = self.bot.hint(matrix)
+                        if action != Action.NOOP:
+                            return (action, bx, by)
+                        return (Action.NOOP, x, y)
 
     def game_over(self, matrix, x, y):
         """ tehtävät kun kuolee """
