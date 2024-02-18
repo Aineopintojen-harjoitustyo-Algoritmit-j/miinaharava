@@ -1,27 +1,29 @@
-""" bots/bot.py - bottien kantaisä """
+""" bots/bot.py - Pohja teköälylle. """
 from tui import Action
 from board import Tile
 
 class Bot():
-    """ Bot - perusluokka perittäväksi """
+    """ Tekoäly luokan runko joka toimii pohjana. Tekoäly palauttaa vihjeitä
+    saamansa näkymän mukaan. """
     def __init__(self, **opts):
         self.uncertain = opts['uncertain'] if 'uncertain' in opts else False
         self.safe_tiles = set()
         self.mine_tiles = set()
         self.matrix = []
-        self.w = 0
-        self.h = 0
+        self.w, self.h = 0, 0
 
     def search(self):
-        """ search - etsii pommeja tai vapaita ko joukkoihin """
+        """ Etsii varmoja miinoja ja vapaita ja lisää ne joukkoihin. Palauttaa
+        True mikäli etsintä tuotti tulosta. """
         return False
 
     def lucky_guess(self):
-        """ lucky_guess - lisää yhden arvatun vapaan vapaiden joukkoon """
-        return Action.NOOP, 0, 0
+        """ Lisää arvauksen vapaiden laattojen joukkoon ja palauttaa True
+        onnistuessaan """
+        return False
 
     def get_hint_from_list(self):
-        """ palauttaa vihjeen suoraan listalta """
+        """ Hakee vihjeen suoraan vapaiden tai miinojen joukoista. """
         if self.safe_tiles:
             x, y = self.safe_tiles.pop()
             return Action.SAFE, x, y
@@ -31,7 +33,8 @@ class Bot():
         return Action.NOOP, 0, 0
 
     def saved_hints(self):
-        """ poistetaan auenneet laatat ja palautetaan onko muuveja """
+        """ Kertoo onko miinojen tai vapaiden joukossa jäljellä vihjeitä.
+        Siivoaa samalla joukoista jo avatut laatat."""
         for tile in list(self.safe_tiles):
             if self.known_tile(tile):
                 self.safe_tiles.remove(tile)
@@ -41,7 +44,8 @@ class Bot():
         return self.safe_tiles or self.mine_tiles
 
     def hint(self, matrix, cursor_x, cursor_y):
-        """ antaa vinkin. tässä tapauksessa ei mitään """
+        """ Kysyy tekoälyltä vihjettä. Joko palauttaa vihjeen, arvauksen tai
+        vain nykyisen paikan ilman toimintoa. """
         self.matrix = matrix
         self.w, self.h = self.get_dimensions()
 
@@ -54,11 +58,11 @@ class Bot():
         return Action.NOOP, cursor_x, cursor_y
 
     def get_dimensions(self):
-        """ palauttaa matriisin dimensiot """
+        """ Apufunktio joka palauttaa pelilaudan mitat. """
         return len(self.matrix), len(self.matrix[0])
 
     def get_neighbours(self, tile):
-        """ palauttaa viereiset koordinaatit joukkona """
+        """ Apufunktio joka palauttaa kysytyn laatan naapurit joukkona. """
         x, y = tile
         offsets = (
             (-1, -1), ( 0, -1), ( 1, -1),
@@ -73,17 +77,17 @@ class Bot():
         return tiles
 
     def get_value(self, tile):
-        """ palauttaa laatan arvon """
+        """ Palauttaa kysytyn laatan tiedot. """
         return self.matrix[tile[0]][tile[1]]
 
     def remove_number_tiles(self, tiles):
-        """ poistaa vapaat ja vapaaksi merkityt alueet ja numerolaatat """
+        """ Poistaa vapaat, vapaaksi merkityt ja numerolaatat joukosta. """
         for tile in list(tiles):
             if self.matrix[tile[0]][tile[1]] < Tile.FLAG_MINE:
                 tiles.remove(tile)
 
     def remove_mine_tiles(self, tiles):
-        """ poistaa pommit ja pommiksi merkityt """
+        """ Poistaa pommit ja pommiksi merkityt joukosta. """
         count=0
         for tile in list(tiles):
             if self.matrix[tile[0]][tile[1]] in (Tile.MINE, Tile.FLAG_MINE):
@@ -92,15 +96,15 @@ class Bot():
         return count
 
     def known_tile(self, tile):
-        """ tutkii onko laatta tiedetty """
+        """ Kortoo onko laatta merkitty tai avattu. """
         return self.matrix[tile[0]][tile[1]] < Tile.UNOPENED
 
     def number_tile(self, tile):
-        """ tutkii onko numerolaatta """
+        """ Kertoo onko laatta numerolaatta """
         return 0 < self.matrix[tile[0]][tile[1]] < Tile.MINE
 
     def count_unknowns(self, tiles):
-        """ laskee tunnistamattomat laatat """
+        """ Laskee laatat jotka on sekä avaamattomia että merkitsemättömiä. """
         count=0
         for tile in list(tiles):
             if not self.known_tile(tile):
@@ -109,7 +113,8 @@ class Bot():
 
 
     def get_interesting_tiles(self):
-        """ palauttaa laatat joiden naapureissa on vaihtelua """
+        """ Etsii laattojen joukon, jossa jokainen laatta on numerolaatta
+        jonka naapurissa vähintään 1 mutta ei kaikki tuntemattomia """
         tiles = set()
         for x in range(self.w):
             for y in range(self.h):
@@ -122,7 +127,8 @@ class Bot():
         return tiles
 
     def get_border_tiles(self):
-        """ palauttaa palauttaa numerolaatat joiden vieressä avaamaton """
+        """ Etsii laattojen joukon, joissa jokainen laatta on numerolaatta
+        jonka naapurista löytyy tuntematon. """
         tiles = set()
         for x in range(self.w):
             for y in range(self.h):
@@ -133,7 +139,7 @@ class Bot():
         return tiles
 
     def get_unknown_tiles(self):
-        """ palauttaa kaikki tuntemattomat laatat """
+        """ Palauttaa kaikkien tuntemattomien laattojen joukon. """
         tiles = set()
         for x in range(self.w):
             for y in range(self.h):
