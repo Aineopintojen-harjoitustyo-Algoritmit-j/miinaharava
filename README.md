@@ -34,4 +34,4 @@ Miinaharava ratkaisijalla
 - [käyttöohje](doc/käyttöohje.pdf)
 
 ### Ohjeita kehitykseen
-- [dev/](dev/)
+- `./dev.sh`

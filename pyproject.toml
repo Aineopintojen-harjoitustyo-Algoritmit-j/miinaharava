@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "miinaharava"
-version = "0.2-alpha"
+version = "0.2"
 description = "Miinaharava ratkaisijalla"
 authors = ["Aineopintojen-harjoitustyo-Algoritmit-j <github-hy-tiralabra@v.hix.fi>"]
 readme = "README.md"
@@ -15,7 +15,7 @@ coverage = "^7.4.0"
 pylint = "^3.0.3"
 
 [tool.poetry.scripts]
-dev = "dev:dev_command"
+miinaharava = 'miinaharava.main:main'
 
 [build-system]
 requires = ["poetry-core"]
