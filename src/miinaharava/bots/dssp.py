@@ -25,6 +25,9 @@ class DSSPBot(SimpleBot):
                 continue
             # Vähennetään yhteiset tuntemattomat 2. alueen tuntemattomista.
             unknowns2 = unknowns2 - unknowns1
+            # Jos 2. alueelle ei jää tuntemattomia ei tarvitse jatkaa
+            if not unknowns2:
+                continue
             # Vähennetään 2. aluuen miinoista ne jotka on pakko sijoittaa
             # yhteiselle alueella
             minecount2 -= common_minecount
