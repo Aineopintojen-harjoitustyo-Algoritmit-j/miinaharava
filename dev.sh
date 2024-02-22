@@ -6,6 +6,7 @@ Käyttö: $0 <komento>
 
 Komennot:
 
+install    Asenna devausymäristö
 pytest     Aja yksikkötestit pytestillä
 pylint     Tarkista muotoilu pylintillä
 covhtml    Tee haarakattavuus raportti html muodossa
@@ -13,6 +14,11 @@ covxml     Sama mutta xml muoto (codecov tarvitsee tämän)
 covff      Tee html haarakattavuusraportti ja avaa se firefoxissa
 all        Sama kuin '$0 covff && $0 pylint'
 " && exit 0
+
+[ $1 = install ] \
+	&& PYTHON_KEYRING_BACKEND=keyring.backends.fail.Keyring \
+	   poetry install --no-root \
+	&& exit 0
 
 [ $1 = pytest ] \
 	&& poetry run pytest -v \

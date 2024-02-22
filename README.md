@@ -45,4 +45,6 @@ Miinaharava ratkaisijalla
 - [käyttöohje](doc/käyttöohje.pdf)
 
 ### Ohjeita kehitykseen
-- `./dev.sh`
+Kehitystyökalut kootusti ajamalla projektin juuressa komento:
+
+`./dev.sh`
