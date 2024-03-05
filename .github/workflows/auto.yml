@@ -29,9 +29,9 @@ jobs:
       - name: Install poetry
         run: pip install poetry
 
-      # Install poetry dependencies
-      - name: Install poetry dependencies
-        run: poetry install
+      # Install dependencies
+      - name: Install dependencies
+        run: ./dev.sh install
 
       # Run coverage xml
       - name: Run unittests with coverage and generate xml
