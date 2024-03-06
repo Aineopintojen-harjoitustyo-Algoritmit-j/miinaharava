@@ -60,8 +60,6 @@ case $1 in
 
 	install)
 		pipx install poetry \
-		&& poetry run pytest -v \
-		&& poetry run python3 -m pylint src/miinaharava/ \
 		&& poetry build \
 		&& pipx install `ls dist/*.tar.gz -t -c -1 | head -1`
 		;;
