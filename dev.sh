@@ -22,10 +22,18 @@ echo "\033[32m>>> $0 $1 - started.\033[0m"
 
 case $1 in
 
+	install-poetry)
+		pipx install poetry
+		;;
+
+	poetry-dev-deps)
+		PYTHON_KEYRING_BACKEND=keyring.backends.fail.Keyring \
+		poetry install --no-root
+		;;
+	
 	dev)
-		pipx install poetry \
-		&& PYTHON_KEYRING_BACKEND=keyring.backends.fail.Keyring \
-	   	poetry install --no-root
+		$0 install-poetry \
+		&& $0 poetry-dev-deps
 		;;
 
 	pytest)
@@ -56,7 +64,7 @@ case $1 in
 		;;
 
 	all)	$0 covff \
-		&& poetry run python3 -m pylint src/miinaharava/
+		&& $0 pylint
 		;;
 
 	install)
