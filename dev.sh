@@ -27,6 +27,11 @@ case $1 in
 		$PIP install poetry
 		;;
 
+	install-latest-build)
+		$PIP install `ls dist/*.tar.gz -t -c -1 | head -1` \
+		&& echo "For uninstall please use '$PIP uninstall ...'"
+		;;
+
 	poetry-dev-deps)
 		PYTHON_KEYRING_BACKEND=keyring.backends.fail.Keyring \
 		poetry install --no-root
@@ -70,11 +75,6 @@ case $1 in
 
 	poetry-build)
 		poetry build
-		;;
-
-	install-latest-build)
-		$PIP install `ls dist/*.tar.gz -t -c -1 | head -1` \
-		&& echo "For uninstall please use '$PIP uninstall ...'"
 		;;
 
 	install)
