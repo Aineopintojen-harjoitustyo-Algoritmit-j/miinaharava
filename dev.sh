@@ -36,25 +36,26 @@ case $1 in
 		poetry run python3 -m pylint src/miinaharava/
 		;;
 
+	coverage)
+		poetry run python3 -m coverage run --branch -m pytest -v
+		;;
+
 	covhtml)
-		poetry run python3 -m coverage run --branch -m pytest -v \
+		$0 coverage \
 		&& poetry run python3 -m coverage html
 		;;
 
 	covxml)
-		poetry run python3 -m coverage run --branch -m pytest -v \
+		$0 coverage \
 		&& poetry run python3 -m coverage xml
 		;;
 
 	covff)
-		poetry run python3 -m coverage run --branch -m pytest -v \
-		&& poetry run python3 -m coverage html \
+		$0 covhtml \
 		&& firefox htmlcov/index.html
 		;;
 
-	all)	poetry run python3 -m coverage run --branch -m pytest -v \
-		&& poetry run python3 -m coverage html \
-		&& firefox htmlcov/index.html \
+	all)	$0 covff \
 		&& poetry run python3 -m pylint src/miinaharava/
 		;;
 
