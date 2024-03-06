@@ -37,7 +37,7 @@ Miinaharava ratkaisijalla
 `miinaharava`
 
 #### Poistaminen
-`./dev.sh uninstall`
+`pipx uninstall miinaharava`
 
 ### Käyttöohje
 - [käyttöohje](doc/käyttöohje.pdf)
