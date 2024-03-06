@@ -25,13 +25,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Install poetry
-      - name: Install poetry
-        run: pip install poetry
-
       # Install dependencies
-      - name: Install dependencies
-        run: ./dev.sh install
+      - name: Install dev dependencies
+        run: ./dev.sh dev
 
       # Run coverage xml
       - name: Run unittests with coverage and generate xml

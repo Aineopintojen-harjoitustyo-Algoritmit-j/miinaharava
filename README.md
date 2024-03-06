@@ -23,7 +23,7 @@ Miinaharava ratkaisijalla
 ### Asennus
 
 #### Asenna käyttämällä pipx:ää
-`pipx install https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava/releases/download/v0.2-beta/miinaharava-0.2b0.tar.gz`
+`pipx install https://github.com/Aineopintojen-harjoitustyo-Algoritmit-j/miinaharava/releases/download/v0.2/miinaharava-0.2.tar.gz`
 
 `miinaharava`
 
@@ -32,14 +32,12 @@ Miinaharava ratkaisijalla
 
 `cd miinaharava`
 
-`poetry build`
-
-`pipx install dist/*.tar.gz`
+`./dev.sh install`
 
 `miinaharava`
 
 #### Poistaminen
-`pipx uninstall miinaharava`
+`./dev.sh uninstall`
 
 ### Käyttöohje
 - [käyttöohje](doc/käyttöohje.pdf)
