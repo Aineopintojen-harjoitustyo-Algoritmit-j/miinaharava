@@ -15,15 +15,16 @@ covxml     Sama mutta xml muoto (codecov tarvitsee tämän)
 covff      Tee html haarakattavuusraportti ja avaa se firefoxissa
 all        Sama kuin '$0 covff && $0 pylint'
 install    Rakenna ja asenna paketti käyttäen pipx & poetry
-uninstall  Poistaa paketin (pipx uninstall...)
 " && exit 0
+
+[ x$PIP = x ] && PIP="pipx"
 
 echo "\033[32m>>> $0 $1 - started.\033[0m"
 
 case $1 in
 
 	install-poetry)
-		pipx install poetry
+		$PIP install poetry
 		;;
 
 	poetry-dev-deps)
@@ -67,14 +68,19 @@ case $1 in
 		&& $0 pylint
 		;;
 
-	install)
-		pipx install poetry \
-		&& poetry build \
-		&& pipx install `ls dist/*.tar.gz -t -c -1 | head -1`
+	poetry-build)
+		poetry build
 		;;
 
-	uninstall)
-		pipx uninstall miinaharava
+	install-latest-build)
+		$PIP install `ls dist/*.tar.gz -t -c -1 | head -1` \
+		&& echo "For uninstall please use '$PIP uninstall ...'"
+		;;
+
+	install)
+		$0 install-poetry \
+		&& $0 poetry-build \
+		&& $0 install-latest-build
 		;;
 
 	*)	

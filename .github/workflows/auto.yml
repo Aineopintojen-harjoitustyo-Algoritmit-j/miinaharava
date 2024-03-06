@@ -27,7 +27,7 @@ jobs:
 
       # Install dependencies
       - name: Install dev dependencies
-        run: ./dev.sh dev
+        run: PIP="pip" ./dev.sh dev
 
       # Run coverage xml
       - name: Run unittests with coverage and generate xml
